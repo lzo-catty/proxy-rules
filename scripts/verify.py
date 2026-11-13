@@ -30,6 +30,9 @@ def verify(output, binary):
         input=json.dumps(profile), text=True, capture_output=True, check=True,
     )
     fragment = json.loads(rendered.stdout)
+    for group in fragment["proxy-groups"]:
+        if not group.get("icon", "").startswith("https://"):
+            raise RuntimeError("策略组缺少图标: " + group["name"])
     with tempfile.TemporaryDirectory(prefix="proxy-rules-check-") as directory:
         home = Path(directory)
         for name, provider in fragment["rule-providers"].items():
@@ -94,6 +97,8 @@ def verify_groups(opener, port, services):
         group = before[service["name"]]
         if group["type"] != "Selector" or group["now"] != service["default"]:
             raise RuntimeError("服务组类型或默认出口错误: " + service["name"])
+        if group.get("icon") != service["icon"]:
+            raise RuntimeError("内核未保留服务图标: " + service["name"])
         if not {"测试节点A", "测试节点B", "DIRECT", "Global"}.issubset(group["all"]):
             raise RuntimeError("服务组缺少可选出口: " + service["name"])
     # Every group must be independently switchable without changing its peers.

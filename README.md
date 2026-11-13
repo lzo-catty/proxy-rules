@@ -1,6 +1,6 @@
 # 自用 FlClash 分流规则
 
-将 `rules/` 中的个人规则与 [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 的直连、代理、广告拦截列表合并，从同一版本的 `geosite.dat` / `geoip.dat` 提取服务分类，通过 GitHub Actions 每日构建，发布为手机 FlClash 可以通过链接更新的 Mihomo 规则集。支持为 Bilibili、Telegram、Apple、Microsoft、Google 分别选择出口节点。
+将 `rules/` 中的个人规则与 [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 的直连、代理、广告拦截列表合并，从同一版本的 `geosite.dat` / `geoip.dat` 提取服务分类，通过 GitHub Actions 每日构建，发布为手机 FlClash 可以通过链接更新的 Mihomo 规则集。默认生成 Global 和 15 个带图标的独立服务策略组，AI 分为 ChatGPT、Claude、Gemini 三组。
 
 ## 手机怎么用
 
@@ -15,14 +15,14 @@ https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/flclash.js
 1. 在 FlClash 中先导入你已有的机场/节点订阅。
 2. 打开脚本管理（新版可从订阅的「扩展 → 脚本 → 配置脚本」进入），选择新增、从 URL 导入，粘贴上面的链接。
 3. 返回该节点订阅的扩展设置，选择脚本模式并启用刚导入的脚本，重新应用配置。
-4. 在代理页面分别打开 **Bilibili / Telegram / Apple / Microsoft / Google**，为每个组选择节点。**Global** 是通用代理及兜底出口，默认优先使用原订阅第一个策略组；请检查其选择符合你的需求。
+4. 在代理页面打开对应的服务组（如 **ChatGPT / Claude / Gemini / YouTube**），为每个组选择节点。**Global** 是通用代理及兜底出口，默认优先使用原订阅第一个策略组；请检查其选择符合你的需求。
 5. 使用**规则模式**。规则提供者的更新间隔为 86400 秒，客户端运行时由内核更新；需要立即更新时，在资源/规则集页面手动更新或重新加载配置。
 
 不同版本菜单名称可能不同，需要支持 `function main(config)` 的扩展脚本功能。脚本保留节点、节点提供者、原策略组和 DNS 等设置，**替换原订阅的路由规则 `rules`**。原有订阅的专用业务分流将由本项目策略替代。脚本本身改动后，在脚本管理中同步一次；只修改自定义规则时，无须重新导入脚本。
 
 **`flclash.js` 是扩展脚本，单个 `*.yaml` 是规则集，都不是包含节点的完整机场订阅。** 不要将它们直接作为新的节点订阅导入。节点订阅地址仅保留在你的 FlClash 中，不需要提交到本仓库。
 
-如果没有远程脚本入口，可以下载 `flclash.js` 后通过文件导入，或复制脚本内容。高级用法：将生成的 `rules-config.yaml` 中的 `rule-providers` 与 `rules` 合入已有配置，并为所有规则目标创建对应策略组（`Global` 和五个服务组），或替换为已存在的组名。这个 YAML 片段本身不包含策略组或节点。
+如果没有远程脚本入口，可以下载 `flclash.js` 后通过文件导入，或复制脚本内容。高级用法：将生成的 `rules-config.yaml` 中的 `rule-providers` 与 `rules` 合入已有配置，并为所有规则目标创建对应策略组（`Global` 和 15 个服务组），或替换为已存在的组名。这个 YAML 片段本身不包含策略组或节点。
 
 ## 独立服务策略组
 
@@ -30,6 +30,16 @@ https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/flclash.js
 | --- | --- | --- |
 | Bilibili | DIRECT（直连） | geosite: bilibili |
 | Telegram | Global | geosite: telegram + geoip: telegram（IPv4/IPv6） |
+| YouTube | Global | geosite: youtube |
+| ChatGPT | Global | geosite: openai（含 OpenAI API） |
+| Claude | Global | geosite: anthropic |
+| Gemini | Global | geosite: google-deepmind（含 AI Studio / Gemini API） |
+| GitHub | Global | geosite: github |
+| Steam | Global | geosite: steam |
+| Netflix | Global | geosite: netflix |
+| Disney+ | Global | geosite: disney（上游 Disney 服务集合） |
+| Spotify | Global | geosite: spotify |
+| OneDrive | DIRECT（直连） | geosite: onedrive |
 | Apple | DIRECT（直连） | geosite: apple |
 | Microsoft | DIRECT（直连） | geosite: microsoft |
 | Google | Global | geosite: google |
@@ -40,16 +50,19 @@ https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/flclash.js
 
 **从旧版单组配置或带“分流-”前缀的版本升级：更新远程扩展脚本并重新应用订阅一次，然后重新选择各组出口。** 只更新规则集不会自动创建或重命名策略组。入口仍是原来的 `flclash.js` 链接。
 
-在 `services.yaml` 中管理服务及默认出口。例如新增 YouTube 时，可加入：
+在 `services.yaml` 中管理服务、默认出口和图标。例如修改现有 YouTube 组：
 
 ```yaml
 - id: youtube
   name: YouTube
   geosite: youtube
   default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png
 ```
 
-`geosite` / 可选 `geoip` 必须是上游 DAT 中存在的分类；缺失或为空会让构建失败。更具体的服务应排在宽泛服务前面，例如 YouTube 放在 Google 前。`id` 使用小写英文字母开头的字母/数字，`name` 必须唯一，`default` 可选 `DIRECT` 或 `Global`。服务列表/组名/默认值调整后，发布并同步一次扩展脚本。
+`geosite` / 可选 `geoip` 必须是上游 DAT 中存在的分类；缺失或为空会让构建失败。更具体的服务应排在宽泛服务前面：YouTube、Gemini 在 Google 前；ChatGPT、GitHub、OneDrive 在 Microsoft 前。每个服务的域名和补充规则一起匹配，因此其正则不会被后面的宽泛域名规则提前命中。`id` 使用小写英文字母开头的字母/数字，`name` 必须唯一，`default` 可选 `DIRECT` 或 `Global`，`icon` 必须是有效的 HTTPS 图标链接。调整这些设置后，发布并同步一次扩展脚本。
+
+所有本项目生成的组都有独立图标，通过标准 `icon` 字段显示，不改变组名。原订阅的策略组保留已有图标；无图标时补上通用 Global 图标。图标来自 [Koolson/Qure](https://github.com/Koolson/Qure) 和 [LobeHub Icons](https://github.com/lobehub/lobe-icons)，由客户端从其 Raw 链接加载和缓存，不打包进规则文件。首次显示需能访问这些图片链接，并使用支持策略组图标的 FlClash 版本；图标下载失败不影响分流。
 
 ## 自定义规则
 
@@ -87,7 +100,7 @@ IP-CIDR6,2001:db8::/32,no-resolve
 1. 自定义拦截 → 自定义直连 → 自定义代理。
 2. 本地网络域名 `lan`/`local` 和常用私有 IPv4/IPv6 网段直连。
 3. 合并后的上游拦截（服务分组不会绕过广告拦截）。
-4. 独立服务规则：先按 `services.yaml` 顺序匹配所有服务的域名集，再按相同顺序匹配补充规则（关键词、正则及 IP）。
+4. 独立服务规则：按 `services.yaml` 顺序，对每个服务依次匹配域名集、补充规则（关键词、正则及 IP），然后才进入下一个服务。
 5. 通用上游代理 → 直连。
 6. 未命中流量走 **Global** 策略组。
 
@@ -108,8 +121,8 @@ IP-CIDR6,2001:db8::/32,no-resolve
 | `direct.yaml` / `proxy.yaml` / `reject.yaml` | 已合并自定义规则的域名集 / `domain` |
 | `direct-extra.yaml` / `proxy-extra.yaml` / `reject-extra.yaml` | 关键词、正则、IP 等 / `classical` |
 | `custom-direct.yaml` / `custom-proxy.yaml` / `custom-reject.yaml` | 优先匹配的个人规则 / `classical` |
-| `bilibili.yaml` / `telegram.yaml` / `apple.yaml` / `microsoft.yaml` / `google.yaml` | 对应服务域名 / `domain` |
-| `bilibili-extra.yaml` / `telegram-extra.yaml` / `apple-extra.yaml` / `microsoft-extra.yaml` / `google-extra.yaml` | 对应服务关键词、正则、IP 等 / `classical` |
+| `<服务id>.yaml`，如 `chatgpt.yaml`、`claude.yaml`、`gemini.yaml`、`youtube.yaml` | 对应服务域名 / `domain` |
+| `<服务id>-extra.yaml`，如 `telegram-extra.yaml`、`chatgpt-extra.yaml` | 对应服务关键词、正则、IP 等 / `classical` |
 | `manifest.json` | 构建时间、上游 commit、输入/输出 SHA-256、规则数量、服务组配置 |
 
 链接格式：
@@ -124,7 +137,7 @@ https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/<文件名>
 https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/direct.yaml
 ```
 
-**默认配置需要完整的 19 个规则提供者及顺序**（9 个基础规则集 + 5 个服务各 2 个规则集），只导入部分域名文件会缺少关键词/正则、Telegram IP 或跨分类的自定义优先级。使用扩展脚本可以自动处理。
+**默认配置需要完整的 39 个规则提供者及顺序**（9 个基础规则集 + 15 个服务各 2 个规则集），只导入部分域名文件会缺少关键词/正则、Telegram IP 或跨分类的自定义优先级。使用扩展脚本可以自动处理。
 
 Raw 域名无法访问时，需要先使用可用网络或现有代理完成首次下载。脚本 URL 能下载不代表规则提供者 URL 也可访问；所有默认链接均使用 `raw.githubusercontent.com`。
 
@@ -135,7 +148,7 @@ Fork 后 Actions 会根据 `GITHUB_REPOSITORY` 自动生成自己的链接；REA
 - 每日北京时间 **07:35**（UTC 23:35）计划执行，GitHub 可能延迟。
 - 推送到 `main` 和手动触发也会构建；PR 只检查，不发布。
 - 每次先解析上游 `release` 对应的 commit，再按同一个 commit 下载三个列表及两份 DAT，避免混用不同发布批次。
-- 测试通过后，执行实际生成的扩展脚本，以固定版本 Mihomo **v1.19.34** 加载全部规则集，核对内核规则数量，并通过内核 API 验证每个服务组能独立切换节点、其他组不受影响。
+- 测试通过后，执行实际生成的扩展脚本，以固定版本 Mihomo **v1.19.34** 加载全部规则集，核对内核规则数量，并通过内核 API 验证每个服务组能独立切换节点、其他组不受影响，且图标字段正确保留。
 - 全部检查通过才写入 `release`；失败保留上一次线上结果。无需 force push，保留发布历史。
 - 定时工作流必须存在于默认分支；Fork 可能需要手动启用 Actions，公开仓库长期无活动时 GitHub 可能暂停定时任务。
 

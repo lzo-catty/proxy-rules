@@ -4,20 +4,76 @@
   name: Bilibili
   geosite: bilibili
   default: DIRECT
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png
 - id: telegram
   name: Telegram
   geosite: telegram
   geoip: telegram
   default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png
+# 细分服务必须在 Google / Microsoft 等大类前面。
+- id: youtube
+  name: YouTube
+  geosite: youtube
+  default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png
+- id: chatgpt
+  name: ChatGPT
+  geosite: openai
+  default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png
+- id: claude
+  name: Claude
+  geosite: anthropic
+  default: Global
+  icon: https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/claude-color.svg
+- id: gemini
+  name: Gemini
+  geosite: google-deepmind
+  default: Global
+  icon: https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/gemini-color.svg
+- id: github
+  name: GitHub
+  geosite: github
+  default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png
+- id: steam
+  name: Steam
+  geosite: steam
+  default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Steam.png
+- id: netflix
+  name: Netflix
+  geosite: netflix
+  default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png
+- id: disney
+  name: Disney+
+  geosite: disney
+  default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png
+- id: spotify
+  name: Spotify
+  geosite: spotify
+  default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png
+- id: onedrive
+  name: OneDrive
+  geosite: onedrive
+  default: DIRECT
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/OneDrive.png
 - id: apple
   name: Apple
   geosite: apple
   default: DIRECT
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png
 - id: microsoft
   name: Microsoft
   geosite: microsoft
   default: DIRECT
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png
 - id: google
   name: Google
   geosite: google
   default: Global
+  icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png

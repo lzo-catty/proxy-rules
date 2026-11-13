@@ -106,10 +106,27 @@ class BuildTests(unittest.TestCase):
         fragment = yaml.safe_load((self.output / "rules-config.yaml").read_text())
         rules = fragment["rules"]
         self.assertLess(rules.index("RULE-SET,pr-reject,REJECT"), rules.index("RULE-SET,pr-telegram,Telegram"))
-        self.assertLess(rules.index("RULE-SET,pr-google,Google"), rules.index("RULE-SET,pr-telegram-extra,Telegram"))
+        self.assertLess(rules.index("RULE-SET,pr-telegram,Telegram"), rules.index("RULE-SET,pr-telegram-extra,Telegram"))
+        self.assertLess(rules.index("RULE-SET,pr-telegram-extra,Telegram"), rules.index("RULE-SET,pr-google,Google"))
         self.assertLess(rules.index("RULE-SET,pr-telegram-extra,Telegram"), rules.index("RULE-SET,pr-proxy,Global"))
         self.assertEqual(self.payload("telegram-extra"), ["IP-CIDR,91.108.0.0/16,no-resolve"])
-        self.assertEqual(len(fragment["rule-providers"]), 19)
+        self.assertEqual(len(fragment["rule-providers"]), 39)
+
+    def test_specific_services_including_regex_precede_broad_categories(self):
+        self.service_texts["chatgpt"] += "\n" + r"regexp:^chatgpt-[0-9]+\.azure\.com$"
+        self.run_build()
+        rules = yaml.safe_load((self.output / "rules-config.yaml").read_text())["rules"]
+        for specific, parent in (("youtube", "google"), ("gemini", "google"), ("chatgpt", "microsoft"), ("github", "microsoft"), ("onedrive", "microsoft")):
+            names = {s["id"]: s["name"] for s in self.services}
+            self.assertLess(rules.index(f"RULE-SET,pr-{specific}-extra,{names[specific]}"), rules.index(f"RULE-SET,pr-{parent},{names[parent]}"))
+        self.assertIn(r"DOMAIN-REGEX,^chatgpt-[0-9]+\.azure\.com$", self.payload("chatgpt-extra"))
+
+    def test_all_requested_services_have_independent_ai_groups_and_icons(self):
+        names = {s["name"] for s in self.services}
+        self.assertEqual(names, {"Bilibili", "Telegram", "Apple", "Microsoft", "Google", "YouTube", "ChatGPT", "Claude", "Gemini", "GitHub", "Steam", "Netflix", "Disney+", "Spotify", "OneDrive"})
+        self.assertEqual({s["name"]: s["geosite"] for s in self.services if s["name"] in {"ChatGPT", "Claude", "Gemini"}},
+                         {"ChatGPT": "openai", "Claude": "anthropic", "Gemini": "google-deepmind"})
+        self.assertTrue(all(s["icon"].startswith("https://") for s in self.services))
 
     def test_global_overrides_and_exclusions_apply_to_services(self):
         self.service_texts["apple"] += "\nblocked.example"
@@ -128,7 +145,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual((self.output / "manifest.json").read_bytes(), previous)
 
     def test_service_configuration_rejects_collisions_and_invalid_targets(self):
-        for change in ({"id": "direct"}, {"name": "Global"}, {"default": "missing"}, {"name": "bad,name"}, {"geoip": "../bad"}):
+        for change in ({"id": "direct"}, {"name": "Global"}, {"default": "missing"}, {"name": "bad,name"}, {"geoip": "../bad"}, {"icon": ""}, {"icon": "file:///tmp/icon.png"}, {"icon": "https:///missing-host"}):
             services = [dict(self.services[0], **change)]
             path = self.root / "services.yaml"
             path.write_text(yaml.safe_dump(services, allow_unicode=True))

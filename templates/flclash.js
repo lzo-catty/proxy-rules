@@ -3,6 +3,7 @@
 const RULE_CONFIG = __RULE_CONFIG__;
 const SERVICES = __SERVICES__;
 const GROUP = "Global";
+const DEFAULT_ICON = "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png";
 
 function main(config) {
   const groups = config["proxy-groups"] || [];
@@ -19,17 +20,20 @@ function main(config) {
   if (!choices.length && !providers.length) {
     throw new Error("请将分流脚本绑定到包含代理节点的订阅");
   }
-  const group = { name: GROUP, type: "select", proxies: choices.slice() };
+  const group = { name: GROUP, type: "select", proxies: choices.slice(), icon: DEFAULT_ICON };
   if (providers.length) group.use = providers;
   if (choices.length) group.proxies.push("DIRECT");
   const serviceGroups = SERVICES.map(function (service) {
     // Never reference other generated service groups: prevents routing loops.
     const candidates = [service.default, GROUP, "DIRECT"].concat(choices);
-    const result = { name: service.name, type: "select", proxies: Array.from(new Set(candidates)) };
+    const result = { name: service.name, type: "select", proxies: Array.from(new Set(candidates)), icon: service.icon };
     if (providers.length) result.use = providers.slice();
     return result;
   });
-  config["proxy-groups"] = groups.concat([group], serviceGroups);
+  const originalGroups = groups.map(function (original) {
+    return original.icon ? original : Object.assign({}, original, { icon: DEFAULT_ICON });
+  });
+  config["proxy-groups"] = originalGroups.concat([group], serviceGroups);
   config["rule-providers"] = Object.assign({}, config["rule-providers"] || {}, RULE_CONFIG["rule-providers"]);
   config.rules = RULE_CONFIG.rules.slice();
   config.mode = "rule";

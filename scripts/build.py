@@ -11,6 +11,7 @@ import re
 import time
 import urllib.error
 import urllib.request
+from urllib.parse import urlsplit
 
 import yaml
 
@@ -31,9 +32,9 @@ def load_services(path):
         raise ValueError("services.yaml 必须包含至少一个服务")
     ids, names = set(CATEGORIES) | {"manifest", "rules-config", "flclash"}, {GROUP, "DIRECT", "REJECT"}
     for service in services:
-        if not isinstance(service, dict) or set(service) - {"id", "name", "geosite", "geoip", "default"}:
+        if not isinstance(service, dict) or set(service) - {"id", "name", "geosite", "geoip", "default", "icon"}:
             raise ValueError("服务配置包含未知字段")
-        for key in ("id", "name", "geosite", "default"):
+        for key in ("id", "name", "geosite", "default", "icon"):
             if not isinstance(service.get(key), str) or not service[key].strip():
                 raise ValueError("服务缺少有效字段: " + key)
         identifier, name = service["id"], service["name"]
@@ -46,6 +47,9 @@ def load_services(path):
                 raise ValueError("服务分类非法: " + key)
         if service["default"] not in (GROUP, "DIRECT"):
             raise ValueError("服务 default 必须为 DIRECT 或 " + GROUP)
+        icon = urlsplit(service["icon"])
+        if icon.scheme != "https" or not icon.hostname or any(c.isspace() for c in service["icon"]):
+            raise ValueError("服务 icon 必须为有效的 HTTPS 图标链接")
         ids.add(identifier)
         names.add(name)
     return services
@@ -186,9 +190,10 @@ def build(upstream_texts, custom_dir, output, repository, upstream_ref,
     for cidr in ("::1/128", "fc00::/7", "fe80::/10"):
         rules.append(f"IP-CIDR6,{cidr},DIRECT,no-resolve")
     rules.extend(f"RULE-SET,pr-reject{suffix},REJECT" for suffix in ("", "-extra"))
-    # Match service domains before IP rules, then fall back to broad categories.
-    for suffix in ("", "-extra"):
-        rules.extend(f"RULE-SET,pr-{s['id']}{suffix},{s['name']}" for s in services)
+    # Keep each service's regex/IP rules ahead of later broad domain categories.
+    # Extracted IP rules use no-resolve, so they don't trigger extra DNS lookups.
+    for service in services:
+        rules.extend(f"RULE-SET,pr-{service['id']}{suffix},{service['name']}" for suffix in ("", "-extra"))
     for category in ("proxy", "direct"):
         rules.extend(f"RULE-SET,pr-{category}{suffix},{targets[category]}" for suffix in ("", "-extra"))
     rules.append("MATCH," + GROUP)
