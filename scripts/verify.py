@@ -52,25 +52,14 @@ def verify(output, binary):
             process = subprocess.Popen([binary, "-d", directory, "-f", str(config_path)], stdout=log, stderr=log)
             try:
                 expected = {"pr-" + name: count for name, count in manifest["counts"].items()}
-                actual = {}
                 opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-                for _ in range(150):
-                    if process.poll() is not None:
-                        break
-                    try:
-                        request = urllib.request.Request(f"http://127.0.0.1:{port}/providers/rules", headers={"Authorization": "Bearer local-validation"})
-                        with opener.open(request, timeout=1) as response:
-                            data = json.load(response)
-                        actual = {name: item["ruleCount"] for name, item in data["providers"].items()}
-                        if actual == expected:
-                            verify_groups(opener, port, manifest["services"])
-                            print("Mihomo loaded all providers:", actual)
-                            return
-                    except (urllib.error.URLError, TimeoutError):
-                        pass
-                    time.sleep(0.2)
-                log.seek(0)
-                raise RuntimeError(f"Provider counts differ: expected={expected}, actual={actual}\n{log.read()}")
+                try:
+                    actual = wait_for_providers(opener, port, process, expected)
+                except RuntimeError as error:
+                    log.seek(0)
+                    raise RuntimeError(f"{error}\n{log.read()}") from error
+                verify_groups(opener, port, manifest["services"])
+                print("Mihomo loaded all providers:", actual)
             finally:
                 if process.poll() is None:
                     process.terminate()
@@ -79,6 +68,32 @@ def verify(output, binary):
                     except subprocess.TimeoutExpired:
                         process.kill()
                         process.wait()
+
+
+def wait_for_providers(opener, port, process, expected, *, attempts=150, delay=0.2):
+    """The HTTP controller can start before the provider registry is initialized."""
+    actual = {}
+    for _ in range(attempts):
+        if process.poll() is not None:
+            break
+        try:
+            request = urllib.request.Request(
+                f"http://127.0.0.1:{port}/providers/rules",
+                headers={"Authorization": "Bearer local-validation"},
+            )
+            with opener.open(request, timeout=1) as response:
+                data = json.load(response)
+            providers = data["providers"]
+            # Mihomo returns JSON null while its provider registry is not ready.
+            # Empty/partial registries also keep polling until every count matches.
+            if providers is not None:
+                actual = {name: item["ruleCount"] for name, item in providers.items()}
+                if actual == expected:
+                    return actual
+        except (urllib.error.URLError, TimeoutError):
+            pass
+        time.sleep(delay)
+    raise RuntimeError(f"Providers not ready or counts differ: expected={expected}, actual={actual}, process_exit={process.poll()}")
 
 
 def verify_groups(opener, port, services):
