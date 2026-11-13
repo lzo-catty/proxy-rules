@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-13T09:51:48.175568+00:00",
+  "generated_at": "2026-11-13T09:56:10.370557+00:00",
   "repository": "lzo-catty/proxy-rules",
-  "source_revision": "75807b613072fa9e891eb1b14aae2213c89c2332",
+  "source_revision": "9afd797c32f7a0b294f274162910682a3c520d37",
   "upstream": {
     "repository": "Loyalsoldier/v2ray-rules-dat",
     "revision": "e3cc7a947e46e24b3f3f8090f3063261f2ce9a66",
@@ -204,7 +204,7 @@
     "google-extra.yaml": "1ad83546059761985124c004b48aaa4d38b43b97c8c5c3fa06443b760776ab2a",
     "rules-config.yaml": "5c604119622337f5162c3590493f8672a2d027e255e264e97fca2a7e1900694a",
     "flclash.js": "387a951778d34d3f3bdbf67975b18086294b3015a9e233bb8d29caea9b3f1ca3",
-    "NOTICE.txt": "d34a923ef14293b5d46681012662e536feeaa3ddceae8d5a0f544c240aaa1f43",
+    "NOTICE.txt": "7cce93f0d64374ce61c328e76a1d970a486014e7761ee4e5ce6265a711c366a3",
     "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
   }
 }
