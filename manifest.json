@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-13T05:23:32.337232+00:00",
+  "generated_at": "2026-11-13T05:26:49.020416+00:00",
   "repository": "lzo-catty/proxy-rules",
-  "source_revision": "59c4bcea6a12bc21bf01d00e5b674461044614de",
+  "source_revision": "b2b6878aa2c3f0e38fc577fc7ff1958ec66264ce",
   "upstream": {
     "repository": "Loyalsoldier/v2ray-rules-dat",
     "revision": "e3cc7a947e46e24b3f3f8090f3063261f2ce9a66",
