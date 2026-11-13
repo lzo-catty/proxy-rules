@@ -1,0 +1,99 @@
+name: Build and publish rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC 23:35 = 北京时间次日 07:35；GitHub 定时任务可能延迟。
+    - cron: '35 23 * * *'
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: proxy-rules-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements.txt
+      - name: Test builder and FlClash script
+        run: |
+          python -m unittest discover -s tests -v
+          node --test tests/flclash.test.cjs
+      - name: Fetch one upstream snapshot and build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/build.py
+      - name: Download pinned Mihomo and verify checksum
+        run: |
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/mihomo.gz" \
+            https://github.com/MetaCubeX/mihomo/releases/download/v1.19.34/mihomo-linux-amd64-compatible-v1.19.34.gz
+          echo "2763f5b414527f7baf6dc57e3f82f3ab561eedf34bfd7c2f2cde1f7e592efe06  $RUNNER_TEMP/mihomo.gz" | sha256sum --check
+          gzip -dc "$RUNNER_TEMP/mihomo.gz" > "$RUNNER_TEMP/mihomo"
+          chmod +x "$RUNNER_TEMP/mihomo"
+      - name: Load all rules in Mihomo
+        run: python scripts/verify.py --mihomo "$RUNNER_TEMP/mihomo"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rules
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: rules
+          path: ${{ runner.temp }}/rules-output
+      - name: Publish generated files to release branch
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          # Network errors fail the job; only a confirmed missing branch creates it.
+          git ls-remote --heads origin release > "$RUNNER_TEMP/release-ref"
+          if [ -s "$RUNNER_TEMP/release-ref" ]; then
+            git fetch origin release
+            git checkout -B release FETCH_HEAD
+          else
+            git checkout --orphan release
+          fi
+          rsync -a --delete --exclude='.git' "$RUNNER_TEMP/rules-output/" ./
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Build rules from ${SOURCE_SHA}"
+          git push origin HEAD:release
+      - name: Show subscription link
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          echo "FlClash 扩展脚本：https://raw.githubusercontent.com/${REPOSITORY}/release/flclash.js" >> "$GITHUB_STEP_SUMMARY"

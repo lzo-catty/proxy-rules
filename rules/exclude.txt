@@ -1,0 +1,3 @@
+# 从所有上游列表中删除完全相同的规则，不影响自定义规则。
+# example.com
+# full:ads.example.com
