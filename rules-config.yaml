@@ -62,10 +62,80 @@ rule-providers:
     url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/custom-proxy.yaml
     path: ./ruleset/proxy-rules/custom-proxy.yaml
     interval: 86400
+  pr-bilibili:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/bilibili.yaml
+    path: ./ruleset/proxy-rules/bilibili.yaml
+    interval: 86400
+  pr-bilibili-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/bilibili-extra.yaml
+    path: ./ruleset/proxy-rules/bilibili-extra.yaml
+    interval: 86400
+  pr-telegram:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/telegram.yaml
+    path: ./ruleset/proxy-rules/telegram.yaml
+    interval: 86400
+  pr-telegram-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/telegram-extra.yaml
+    path: ./ruleset/proxy-rules/telegram-extra.yaml
+    interval: 86400
+  pr-apple:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/apple.yaml
+    path: ./ruleset/proxy-rules/apple.yaml
+    interval: 86400
+  pr-apple-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/apple-extra.yaml
+    path: ./ruleset/proxy-rules/apple-extra.yaml
+    interval: 86400
+  pr-microsoft:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/microsoft.yaml
+    path: ./ruleset/proxy-rules/microsoft.yaml
+    interval: 86400
+  pr-microsoft-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/microsoft-extra.yaml
+    path: ./ruleset/proxy-rules/microsoft-extra.yaml
+    interval: 86400
+  pr-google:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/google.yaml
+    path: ./ruleset/proxy-rules/google.yaml
+    interval: 86400
+  pr-google-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/google-extra.yaml
+    path: ./ruleset/proxy-rules/google-extra.yaml
+    interval: 86400
 rules:
 - RULE-SET,pr-custom-reject,REJECT
 - RULE-SET,pr-custom-direct,DIRECT
-- RULE-SET,pr-custom-proxy,自定义分流
+- RULE-SET,pr-custom-proxy,Global
 - DOMAIN-SUFFIX,lan,DIRECT
 - DOMAIN-SUFFIX,local,DIRECT
 - IP-CIDR,0.0.0.0/8,DIRECT,no-resolve
@@ -80,8 +150,18 @@ rules:
 - IP-CIDR6,fe80::/10,DIRECT,no-resolve
 - RULE-SET,pr-reject,REJECT
 - RULE-SET,pr-reject-extra,REJECT
-- RULE-SET,pr-proxy,自定义分流
-- RULE-SET,pr-proxy-extra,自定义分流
+- RULE-SET,pr-bilibili,Bilibili
+- RULE-SET,pr-telegram,Telegram
+- RULE-SET,pr-apple,Apple
+- RULE-SET,pr-microsoft,Microsoft
+- RULE-SET,pr-google,Google
+- RULE-SET,pr-bilibili-extra,Bilibili
+- RULE-SET,pr-telegram-extra,Telegram
+- RULE-SET,pr-apple-extra,Apple
+- RULE-SET,pr-microsoft-extra,Microsoft
+- RULE-SET,pr-google-extra,Google
+- RULE-SET,pr-proxy,Global
+- RULE-SET,pr-proxy-extra,Global
 - RULE-SET,pr-direct,DIRECT
 - RULE-SET,pr-direct-extra,DIRECT
-- MATCH,自定义分流
+- MATCH,Global

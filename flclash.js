@@ -73,12 +73,92 @@ const RULE_CONFIG = {
       "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/custom-proxy.yaml",
       "path": "./ruleset/proxy-rules/custom-proxy.yaml",
       "interval": 86400
+    },
+    "pr-bilibili": {
+      "type": "http",
+      "behavior": "domain",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/bilibili.yaml",
+      "path": "./ruleset/proxy-rules/bilibili.yaml",
+      "interval": 86400
+    },
+    "pr-bilibili-extra": {
+      "type": "http",
+      "behavior": "classical",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/bilibili-extra.yaml",
+      "path": "./ruleset/proxy-rules/bilibili-extra.yaml",
+      "interval": 86400
+    },
+    "pr-telegram": {
+      "type": "http",
+      "behavior": "domain",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/telegram.yaml",
+      "path": "./ruleset/proxy-rules/telegram.yaml",
+      "interval": 86400
+    },
+    "pr-telegram-extra": {
+      "type": "http",
+      "behavior": "classical",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/telegram-extra.yaml",
+      "path": "./ruleset/proxy-rules/telegram-extra.yaml",
+      "interval": 86400
+    },
+    "pr-apple": {
+      "type": "http",
+      "behavior": "domain",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/apple.yaml",
+      "path": "./ruleset/proxy-rules/apple.yaml",
+      "interval": 86400
+    },
+    "pr-apple-extra": {
+      "type": "http",
+      "behavior": "classical",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/apple-extra.yaml",
+      "path": "./ruleset/proxy-rules/apple-extra.yaml",
+      "interval": 86400
+    },
+    "pr-microsoft": {
+      "type": "http",
+      "behavior": "domain",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/microsoft.yaml",
+      "path": "./ruleset/proxy-rules/microsoft.yaml",
+      "interval": 86400
+    },
+    "pr-microsoft-extra": {
+      "type": "http",
+      "behavior": "classical",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/microsoft-extra.yaml",
+      "path": "./ruleset/proxy-rules/microsoft-extra.yaml",
+      "interval": 86400
+    },
+    "pr-google": {
+      "type": "http",
+      "behavior": "domain",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/google.yaml",
+      "path": "./ruleset/proxy-rules/google.yaml",
+      "interval": 86400
+    },
+    "pr-google-extra": {
+      "type": "http",
+      "behavior": "classical",
+      "format": "yaml",
+      "url": "https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/google-extra.yaml",
+      "path": "./ruleset/proxy-rules/google-extra.yaml",
+      "interval": 86400
     }
   },
   "rules": [
     "RULE-SET,pr-custom-reject,REJECT",
     "RULE-SET,pr-custom-direct,DIRECT",
-    "RULE-SET,pr-custom-proxy,自定义分流",
+    "RULE-SET,pr-custom-proxy,Global",
     "DOMAIN-SUFFIX,lan,DIRECT",
     "DOMAIN-SUFFIX,local,DIRECT",
     "IP-CIDR,0.0.0.0/8,DIRECT,no-resolve",
@@ -93,31 +173,84 @@ const RULE_CONFIG = {
     "IP-CIDR6,fe80::/10,DIRECT,no-resolve",
     "RULE-SET,pr-reject,REJECT",
     "RULE-SET,pr-reject-extra,REJECT",
-    "RULE-SET,pr-proxy,自定义分流",
-    "RULE-SET,pr-proxy-extra,自定义分流",
+    "RULE-SET,pr-bilibili,Bilibili",
+    "RULE-SET,pr-telegram,Telegram",
+    "RULE-SET,pr-apple,Apple",
+    "RULE-SET,pr-microsoft,Microsoft",
+    "RULE-SET,pr-google,Google",
+    "RULE-SET,pr-bilibili-extra,Bilibili",
+    "RULE-SET,pr-telegram-extra,Telegram",
+    "RULE-SET,pr-apple-extra,Apple",
+    "RULE-SET,pr-microsoft-extra,Microsoft",
+    "RULE-SET,pr-google-extra,Google",
+    "RULE-SET,pr-proxy,Global",
+    "RULE-SET,pr-proxy-extra,Global",
     "RULE-SET,pr-direct,DIRECT",
     "RULE-SET,pr-direct-extra,DIRECT",
-    "MATCH,自定义分流"
+    "MATCH,Global"
   ]
 };
-const GROUP = "自定义分流";
+const SERVICES = [
+  {
+    "id": "bilibili",
+    "name": "Bilibili",
+    "geosite": "bilibili",
+    "default": "DIRECT"
+  },
+  {
+    "id": "telegram",
+    "name": "Telegram",
+    "geosite": "telegram",
+    "geoip": "telegram",
+    "default": "Global"
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "geosite": "apple",
+    "default": "DIRECT"
+  },
+  {
+    "id": "microsoft",
+    "name": "Microsoft",
+    "geosite": "microsoft",
+    "default": "DIRECT"
+  },
+  {
+    "id": "google",
+    "name": "Google",
+    "geosite": "google",
+    "default": "Global"
+  }
+];
+const GROUP = "Global";
 
 function main(config) {
   const groups = config["proxy-groups"] || [];
   const nodes = (config.proxies || []).map(function (node) { return node.name; });
   const providers = Object.keys(config["proxy-providers"] || {});
-  if (nodes.indexOf(GROUP) !== -1 || groups.some(function (g) { return g.name === GROUP; })) {
-    throw new Error("订阅已有“" + GROUP + "”名称，请先重命名以避免冲突");
-  }
+  const existing = groups.map(function (g) { return g.name; }).concat(nodes);
+  [GROUP].concat(SERVICES.map(function (s) { return s.name; })).forEach(function (name) {
+    if (existing.indexOf(name) !== -1) {
+      throw new Error("订阅已有“" + name + "”名称，请先重命名以避免冲突");
+    }
+  });
   // 优先沿用订阅的第一个策略组；同时兼容只有节点或 proxy-providers 的订阅。
-  const choices = groups.map(function (g) { return g.name; }).concat(nodes);
+  const choices = Array.from(new Set(existing));
   if (!choices.length && !providers.length) {
     throw new Error("请将分流脚本绑定到包含代理节点的订阅");
   }
-  const group = { name: GROUP, type: "select", proxies: choices };
+  const group = { name: GROUP, type: "select", proxies: choices.slice() };
   if (providers.length) group.use = providers;
   if (choices.length) group.proxies.push("DIRECT");
-  config["proxy-groups"] = groups.concat([group]);
+  const serviceGroups = SERVICES.map(function (service) {
+    // Never reference other generated service groups: prevents routing loops.
+    const candidates = [service.default, GROUP, "DIRECT"].concat(choices);
+    const result = { name: service.name, type: "select", proxies: Array.from(new Set(candidates)) };
+    if (providers.length) result.use = providers.slice();
+    return result;
+  });
+  config["proxy-groups"] = groups.concat([group], serviceGroups);
   config["rule-providers"] = Object.assign({}, config["rule-providers"] || {}, RULE_CONFIG["rule-providers"]);
   config.rules = RULE_CONFIG.rules.slice();
   config.mode = "rule";

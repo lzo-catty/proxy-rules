@@ -1,16 +1,51 @@
 {
-  "generated_at": "2026-11-13T04:28:32.363860+00:00",
+  "generated_at": "2026-11-13T05:23:32.337232+00:00",
   "repository": "lzo-catty/proxy-rules",
-  "source_revision": "82c469ff1611932b60f0a909a1a2d2cf4c76ffbe",
+  "source_revision": "59c4bcea6a12bc21bf01d00e5b674461044614de",
   "upstream": {
     "repository": "Loyalsoldier/v2ray-rules-dat",
     "revision": "e3cc7a947e46e24b3f3f8090f3063261f2ce9a66",
     "sha256": {
+      "geosite.dat": "f5bf5d977840be4b9e73856b20f8d6dc7ef72285330c5f270d1d64cc2bf7982f",
+      "geoip.dat": "304ac8a1cbcc8166e4f5a4f32955e4d0fb77a1bd713583e371b30ee27f3659d8",
       "reject": "bc601d1ed56b6f7d5b51e8c75c029d336531098c65c1889c20ecd030725e0d76",
       "direct": "4354f4703b356c653882e70dda64c47cb56f6e27aff3d0ed5d2fdb1a01443e49",
       "proxy": "140fe42d1d0b3dea85ff0f5f8c7059b7e9fac10686a4c97587621ac107851017"
     }
   },
+  "services": [
+    {
+      "id": "bilibili",
+      "name": "Bilibili",
+      "geosite": "bilibili",
+      "default": "DIRECT"
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "geosite": "telegram",
+      "geoip": "telegram",
+      "default": "Global"
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "geosite": "apple",
+      "default": "DIRECT"
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "geosite": "microsoft",
+      "default": "DIRECT"
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "geosite": "google",
+      "default": "Global"
+    }
+  ],
   "counts": {
     "reject": 199928,
     "reject-extra": 0,
@@ -20,7 +55,17 @@
     "custom-direct": 0,
     "proxy": 27351,
     "proxy-extra": 151,
-    "custom-proxy": 0
+    "custom-proxy": 0,
+    "bilibili": 53,
+    "bilibili-extra": 0,
+    "telegram": 21,
+    "telegram-extra": 12,
+    "apple": 1792,
+    "apple-extra": 0,
+    "microsoft": 757,
+    "microsoft-extra": 0,
+    "google": 1078,
+    "google-extra": 2
   },
   "sha256": {
     "reject.yaml": "9a174a525232d988d868b21fe472df57a4ba6703abde65dee79744161cc54e32",
@@ -32,9 +77,19 @@
     "proxy.yaml": "752466f4ffc74bb6bfe924852c9357b44b788c45eb14e49e10e0491c7d058f2e",
     "proxy-extra.yaml": "41c6076888977e76b2df3a46771a5dc673575c67aceaa80c0c15e21c9eaca7ab",
     "custom-proxy.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
-    "rules-config.yaml": "b9ea4b0e0dfee907dd4cda4d9078a1c84dc8a6c52e07e907d92ebbc9a30c5eb2",
-    "flclash.js": "576339198bcabaa0620435ae04cc4f5aacd8a9ca97e89d9ba8b92502eeafcbe8",
-    "NOTICE.txt": "7bc0a8519e350fcac1d35c96754e8deeeb7a498b82d9db8569a435fce7039ef6",
+    "bilibili.yaml": "86bf3f59e821bad902f9594a08e52a4bedd260e23b31c1e2ae674dd3fd08dee4",
+    "bilibili-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "telegram.yaml": "87453f1df663c302e018281149f313c6bd36f7a4fd0b9b0dcb1b4d3a2d62f474",
+    "telegram-extra.yaml": "0368ba6995ff4d41a95ca431ed0b23744de3f16d4fa6ff269f7f1258ba738ab1",
+    "apple.yaml": "378779bcbfdf941eb24250326d24f81168fa7ff41a253b03033d1ccf10821848",
+    "apple-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "microsoft.yaml": "ff4431f8d22b6ccc872e6aaf27a2c3fe8fa7d1ec6b2132765ca4e9a40642d843",
+    "microsoft-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "google.yaml": "cbf2edd81a106f44d4b0fdfa5987c2a5aef7fbe978291385e9159ed12abac358",
+    "google-extra.yaml": "1ad83546059761985124c004b48aaa4d38b43b97c8c5c3fa06443b760776ab2a",
+    "rules-config.yaml": "88afe4acfdd38e029c2c3ba763a2acdebdbcd4327bd1a2c0b0b4f8b908f0622d",
+    "flclash.js": "1af68074ad030c7d0ce4b4cf62d89dfb3d1549d26828737e9a33efc2d40c0f50",
+    "NOTICE.txt": "d34a923ef14293b5d46681012662e536feeaa3ddceae8d5a0f544c240aaa1f43",
     "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
   }
 }
