@@ -22,7 +22,7 @@ else:
 ROOT = Path(__file__).resolve().parents[1]
 UPSTREAM = "Loyalsoldier/v2ray-rules-dat"
 CATEGORIES = ("reject", "direct", "proxy")
-GROUP = "自定义分流"
+GROUP = "Global"
 
 
 def load_services(path):

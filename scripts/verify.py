@@ -23,7 +23,7 @@ def verify(output, binary):
             {"name": name, "type": "http", "server": "127.0.0.1", "port": 9}
             for name in ("测试节点A", "测试节点B")
         ],
-        "proxy-groups": [{"name": "Apple", "type": "select", "proxies": ["测试节点A"]}],
+        "proxy-groups": [{"name": "机场选择", "type": "select", "proxies": ["测试节点A"]}],
     }
     rendered = subprocess.run(
         ["node", str(Path(__file__).with_name("render-profile.cjs")), str(output / "flclash.js")],
@@ -94,7 +94,7 @@ def verify_groups(opener, port, services):
         group = before[service["name"]]
         if group["type"] != "Selector" or group["now"] != service["default"]:
             raise RuntimeError("服务组类型或默认出口错误: " + service["name"])
-        if not {"测试节点A", "测试节点B", "DIRECT", "自定义分流"}.issubset(group["all"]):
+        if not {"测试节点A", "测试节点B", "DIRECT", "Global"}.issubset(group["all"]):
             raise RuntimeError("服务组缺少可选出口: " + service["name"])
     # Every group must be independently switchable without changing its peers.
     for service in services:

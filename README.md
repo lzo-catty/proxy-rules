@@ -15,41 +15,41 @@ https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/flclash.js
 1. 在 FlClash 中先导入你已有的机场/节点订阅。
 2. 打开脚本管理（新版可从订阅的「扩展 → 脚本 → 配置脚本」进入），选择新增、从 URL 导入，粘贴上面的链接。
 3. 返回该节点订阅的扩展设置，选择脚本模式并启用刚导入的脚本，重新应用配置。
-4. 在代理页面分别打开 **分流-Bilibili / 分流-Telegram / 分流-Apple / 分流-Microsoft / 分流-Google**，为每个组选择节点。**自定义分流** 是通用代理及兜底出口，默认优先使用原订阅第一个策略组；请检查其选择符合你的需求。
+4. 在代理页面分别打开 **Bilibili / Telegram / Apple / Microsoft / Google**，为每个组选择节点。**Global** 是通用代理及兜底出口，默认优先使用原订阅第一个策略组；请检查其选择符合你的需求。
 5. 使用**规则模式**。规则提供者的更新间隔为 86400 秒，客户端运行时由内核更新；需要立即更新时，在资源/规则集页面手动更新或重新加载配置。
 
 不同版本菜单名称可能不同，需要支持 `function main(config)` 的扩展脚本功能。脚本保留节点、节点提供者、原策略组和 DNS 等设置，**替换原订阅的路由规则 `rules`**。原有订阅的专用业务分流将由本项目策略替代。脚本本身改动后，在脚本管理中同步一次；只修改自定义规则时，无须重新导入脚本。
 
 **`flclash.js` 是扩展脚本，单个 `*.yaml` 是规则集，都不是包含节点的完整机场订阅。** 不要将它们直接作为新的节点订阅导入。节点订阅地址仅保留在你的 FlClash 中，不需要提交到本仓库。
 
-如果没有远程脚本入口，可以下载 `flclash.js` 后通过文件导入，或复制脚本内容。高级用法：将生成的 `rules-config.yaml` 中的 `rule-providers` 与 `rules` 合入已有配置，并为所有规则目标创建对应策略组（`自定义分流` 和五个 `分流-…` 组），或替换为已存在的组名。这个 YAML 片段本身不包含策略组或节点。
+如果没有远程脚本入口，可以下载 `flclash.js` 后通过文件导入，或复制脚本内容。高级用法：将生成的 `rules-config.yaml` 中的 `rule-providers` 与 `rules` 合入已有配置，并为所有规则目标创建对应策略组（`Global` 和五个服务组），或替换为已存在的组名。这个 YAML 片段本身不包含策略组或节点。
 
 ## 独立服务策略组
 
 | 策略组 | 初次应用默认出口 | 规则来源 |
 | --- | --- | --- |
-| 分流-Bilibili | DIRECT（直连） | geosite: bilibili |
-| 分流-Telegram | 自定义分流 | geosite: telegram + geoip: telegram（IPv4/IPv6） |
-| 分流-Apple | DIRECT（直连） | geosite: apple |
-| 分流-Microsoft | DIRECT（直连） | geosite: microsoft |
-| 分流-Google | 自定义分流 | geosite: google |
+| Bilibili | DIRECT（直连） | geosite: bilibili |
+| Telegram | Global | geosite: telegram + geoip: telegram（IPv4/IPv6） |
+| Apple | DIRECT（直连） | geosite: apple |
+| Microsoft | DIRECT（直连） | geosite: microsoft |
+| Google | Global | geosite: google |
 
-每个服务组都提供 **DIRECT、自定义分流、原订阅策略组、所有内嵌节点、所有节点提供者中的节点**。例如 Telegram 选新加坡节点、Google 选日本节点、Apple 保持直连，互不影响。组中选择“自定义分流”时才跟随该组变化；直接选择某个节点则独立使用该节点。FlClash 已保存的手动选择可能覆盖初始默认值。
+每个服务组都提供 **DIRECT、Global、原订阅策略组、所有内嵌节点、所有节点提供者中的节点**。例如 Telegram 选新加坡节点、Google 选日本节点、Apple 保持直连，互不影响。组中选择“Global”时才跟随该组变化；直接选择某个节点则独立使用该节点。FlClash 已保存的手动选择可能覆盖初始默认值。
 
-名称使用 `分流-` 前缀，允许与原机场中的 `Apple`、`Google` 等策略组共存。如果订阅恰好已有同名 `分流-…` 或 `自定义分流` 组/节点，脚本会报错，请先改名。各新服务组不互相引用，避免循环依赖。
+服务组直接使用服务名称，不添加前缀。如果原订阅已有 `Apple`、`Google`、`Global` 等同名组或节点，脚本会明确提示冲突，请先将原订阅同名项及其引用改名，或在 `services.yaml` 中选择不冲突的服务组名称。各新服务组不互相引用，避免循环依赖。`Global` 与 Mihomo 内置的全大写 `GLOBAL` 名称不同；使用本项目时保持规则模式。
 
-**从旧版单组配置升级：更新远程扩展脚本并重新应用订阅一次。** 只更新规则集不会自动创建新策略组。入口仍是原来的 `flclash.js` 链接。
+**从旧版单组配置或带“分流-”前缀的版本升级：更新远程扩展脚本并重新应用订阅一次，然后重新选择各组出口。** 只更新规则集不会自动创建或重命名策略组。入口仍是原来的 `flclash.js` 链接。
 
 在 `services.yaml` 中管理服务及默认出口。例如新增 YouTube 时，可加入：
 
 ```yaml
 - id: youtube
-  name: 分流-YouTube
+  name: YouTube
   geosite: youtube
-  default: 自定义分流
+  default: Global
 ```
 
-`geosite` / 可选 `geoip` 必须是上游 DAT 中存在的分类；缺失或为空会让构建失败。更具体的服务应排在宽泛服务前面，例如 YouTube 放在 Google 前。`id` 使用小写英文字母开头的字母/数字，`name` 必须唯一，`default` 可选 `DIRECT` 或 `自定义分流`。服务列表/组名/默认值调整后，发布并同步一次扩展脚本。
+`geosite` / 可选 `geoip` 必须是上游 DAT 中存在的分类；缺失或为空会让构建失败。更具体的服务应排在宽泛服务前面，例如 YouTube 放在 Google 前。`id` 使用小写英文字母开头的字母/数字，`name` 必须唯一，`default` 可选 `DIRECT` 或 `Global`。服务列表/组名/默认值调整后，发布并同步一次扩展脚本。
 
 ## 自定义规则
 
@@ -89,7 +89,7 @@ IP-CIDR6,2001:db8::/32,no-resolve
 3. 合并后的上游拦截（服务分组不会绕过广告拦截）。
 4. 独立服务规则：先按 `services.yaml` 顺序匹配所有服务的域名集，再按相同顺序匹配补充规则（关键词、正则及 IP）。
 5. 通用上游代理 → 直连。
-6. 未命中流量走 **自定义分流** 策略组。
+6. 未命中流量走 **Global** 策略组。
 
 自定义规则会从其他上游分类中移除完全相同的条目，并单独作为优先规则集。例如上游拦截 `ads.example.com`，自定义直连 `full:login.ads.example.com`，仍然能让该精确域名优先直连。三个自定义文件之间出现相同规则但不同策略时构建失败；不同但重叠的域名/正则按上述顺序处理，不自动按域名长度排序。
 

@@ -3,10 +3,10 @@ const fs = require("node:fs");
 const vm = require("node:vm");
 const test = require("node:test");
 
-const fragment = { "rule-providers": { "pr-direct": { type: "http", behavior: "domain", url: "https://example.com/direct.yaml" } }, rules: ["RULE-SET,pr-direct,DIRECT", "MATCH,自定义分流"] };
+const fragment = { "rule-providers": { "pr-direct": { type: "http", behavior: "domain", url: "https://example.com/direct.yaml" } }, rules: ["RULE-SET,pr-direct,DIRECT", "MATCH,Global"] };
 const services = [
-  { name: "分流-Telegram", default: "自定义分流" },
-  { name: "分流-Apple", default: "DIRECT" },
+  { name: "Telegram", default: "Global" },
+  { name: "Apple", default: "DIRECT" },
 ];
 const script = fs.readFileSync("templates/flclash.js", "utf8")
   .replace("__RULE_CONFIG__", JSON.stringify(fragment))
@@ -42,23 +42,23 @@ test("accepts subscriptions with nodes only", () => {
 
 test("reports missing nodes and group-name collisions", () => {
   assert.throws(() => apply({}), /包含代理节点/);
-  assert.throws(() => apply({ proxies: [{ name: "自定义分流" }] }), /重命名/);
-  assert.throws(() => apply({ "proxy-groups": [{ name: "自定义分流" }] }), /重命名/);
-  assert.throws(() => apply({ "proxy-groups": [{ name: "分流-Apple" }] }), /重命名/);
-  assert.throws(() => apply({ proxies: [{ name: "分流-Telegram" }] }), /重命名/);
+  assert.throws(() => apply({ proxies: [{ name: "Global" }] }), /重命名/);
+  assert.throws(() => apply({ "proxy-groups": [{ name: "Global" }] }), /重命名/);
+  assert.throws(() => apply({ "proxy-groups": [{ name: "Apple" }] }), /重命名/);
+  assert.throws(() => apply({ proxies: [{ name: "Telegram" }] }), /重命名/);
 });
 
 test("each service independently offers every node and the configured default", () => {
-  const result = apply({ proxies: [{ name: "香港" }, { name: "日本" }], "proxy-groups": [{ name: "Apple", type: "select", proxies: ["香港"] }] });
+  const result = apply({ proxies: [{ name: "香港" }, { name: "日本" }], "proxy-groups": [{ name: "机场选择", type: "select", proxies: ["香港"] }] });
   for (const service of services) {
     const group = result["proxy-groups"].find(g => g.name === service.name);
     assert.equal(group.type, "select");
     assert.equal(group.proxies[0], service.default);
-    for (const name of ["香港", "日本", "Apple", "DIRECT", "自定义分流"]) assert.ok(group.proxies.includes(name));
+    for (const name of ["香港", "日本", "机场选择", "DIRECT", "Global"]) assert.ok(group.proxies.includes(name));
     assert.equal(new Set(group.proxies).size, group.proxies.length);
     for (const other of services) assert.ok(!group.proxies.includes(other.name));
   }
-  const fallback = result["proxy-groups"].find(g => g.name === "自定义分流");
+  const fallback = result["proxy-groups"].find(g => g.name === "Global");
   assert.ok(!fallback.proxies.some(name => services.some(s => s.name === name)));
 });
 
@@ -68,6 +68,6 @@ test("every service can select nodes from proxy-provider-only subscriptions", ()
     const group = result["proxy-groups"].find(g => g.name === service.name);
     assert.deepEqual(group.use, ["airportA", "airportB"]);
     assert.equal(group.proxies[0], service.default);
-    assert.deepEqual(new Set(group.proxies), new Set(["DIRECT", "自定义分流"]));
+    assert.deepEqual(new Set(group.proxies), new Set(["DIRECT", "Global"]));
   }
 });

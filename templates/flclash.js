@@ -2,7 +2,7 @@
 // 此脚本接管 rules，保留节点、原策略组、DNS 和其他连接配置。
 const RULE_CONFIG = __RULE_CONFIG__;
 const SERVICES = __SERVICES__;
-const GROUP = "自定义分流";
+const GROUP = "Global";
 
 function main(config) {
   const groups = config["proxy-groups"] || [];

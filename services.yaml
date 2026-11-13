@@ -1,23 +1,23 @@
-# 按此顺序匹配服务；分组名称加前缀，避免与机场已有的同名组冲突。
-# default 可选 DIRECT 或 自定义分流；手机端可为每组单独选择其他节点。
+# 按此顺序匹配服务；name 是手机端显示的策略组名称。
+# default 可选 DIRECT 或 Global；手机端可为每组单独选择其他节点。
 - id: bilibili
-  name: 分流-Bilibili
+  name: Bilibili
   geosite: bilibili
   default: DIRECT
 - id: telegram
-  name: 分流-Telegram
+  name: Telegram
   geosite: telegram
   geoip: telegram
-  default: 自定义分流
+  default: Global
 - id: apple
-  name: 分流-Apple
+  name: Apple
   geosite: apple
   default: DIRECT
 - id: microsoft
-  name: 分流-Microsoft
+  name: Microsoft
   geosite: microsoft
   default: DIRECT
 - id: google
-  name: 分流-Google
+  name: Google
   geosite: google
-  default: 自定义分流
+  default: Global

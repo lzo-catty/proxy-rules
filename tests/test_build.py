@@ -66,8 +66,8 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn("+.ads.example", self.payload("reject"))
         self.assertIn("login.example", self.payload("direct"))
         fragment = yaml.safe_load((self.output / "rules-config.yaml").read_text())
-        self.assertEqual(fragment["rules"][:3], ["RULE-SET,pr-custom-reject,REJECT", "RULE-SET,pr-custom-direct,DIRECT", "RULE-SET,pr-custom-proxy,自定义分流"])
-        self.assertEqual(fragment["rules"][-1], "MATCH,自定义分流")
+        self.assertEqual(fragment["rules"][:3], ["RULE-SET,pr-custom-reject,REJECT", "RULE-SET,pr-custom-direct,DIRECT", "RULE-SET,pr-custom-proxy,Global"])
+        self.assertEqual(fragment["rules"][-1], "MATCH,Global")
         self.assertTrue(all("owner/repo/release/" in p["url"] for p in fragment["rule-providers"].values()))
         self.assertEqual(manifest["counts"]["custom-proxy"], 0)
         for filename, digest in manifest["sha256"].items():
@@ -105,9 +105,9 @@ class BuildTests(unittest.TestCase):
         self.run_build()
         fragment = yaml.safe_load((self.output / "rules-config.yaml").read_text())
         rules = fragment["rules"]
-        self.assertLess(rules.index("RULE-SET,pr-reject,REJECT"), rules.index("RULE-SET,pr-telegram,分流-Telegram"))
-        self.assertLess(rules.index("RULE-SET,pr-google,分流-Google"), rules.index("RULE-SET,pr-telegram-extra,分流-Telegram"))
-        self.assertLess(rules.index("RULE-SET,pr-telegram-extra,分流-Telegram"), rules.index("RULE-SET,pr-proxy,自定义分流"))
+        self.assertLess(rules.index("RULE-SET,pr-reject,REJECT"), rules.index("RULE-SET,pr-telegram,Telegram"))
+        self.assertLess(rules.index("RULE-SET,pr-google,Google"), rules.index("RULE-SET,pr-telegram-extra,Telegram"))
+        self.assertLess(rules.index("RULE-SET,pr-telegram-extra,Telegram"), rules.index("RULE-SET,pr-proxy,Global"))
         self.assertEqual(self.payload("telegram-extra"), ["IP-CIDR,91.108.0.0/16,no-resolve"])
         self.assertEqual(len(fragment["rule-providers"]), 19)
 
@@ -128,7 +128,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual((self.output / "manifest.json").read_bytes(), previous)
 
     def test_service_configuration_rejects_collisions_and_invalid_targets(self):
-        for change in ({"id": "direct"}, {"name": "自定义分流"}, {"default": "missing"}, {"name": "bad,name"}, {"geoip": "../bad"}):
+        for change in ({"id": "direct"}, {"name": "Global"}, {"default": "missing"}, {"name": "bad,name"}, {"geoip": "../bad"}):
             services = [dict(self.services[0], **change)]
             path = self.root / "services.yaml"
             path.write_text(yaml.safe_dump(services, allow_unicode=True))
