@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-11-13T04:28:32.363860+00:00",
+  "repository": "lzo-catty/proxy-rules",
+  "source_revision": "82c469ff1611932b60f0a909a1a2d2cf4c76ffbe",
+  "upstream": {
+    "repository": "Loyalsoldier/v2ray-rules-dat",
+    "revision": "e3cc7a947e46e24b3f3f8090f3063261f2ce9a66",
+    "sha256": {
+      "reject": "bc601d1ed56b6f7d5b51e8c75c029d336531098c65c1889c20ecd030725e0d76",
+      "direct": "4354f4703b356c653882e70dda64c47cb56f6e27aff3d0ed5d2fdb1a01443e49",
+      "proxy": "140fe42d1d0b3dea85ff0f5f8c7059b7e9fac10686a4c97587621ac107851017"
+    }
+  },
+  "counts": {
+    "reject": 199928,
+    "reject-extra": 0,
+    "custom-reject": 0,
+    "direct": 110189,
+    "direct-extra": 8,
+    "custom-direct": 0,
+    "proxy": 27351,
+    "proxy-extra": 151,
+    "custom-proxy": 0
+  },
+  "sha256": {
+    "reject.yaml": "9a174a525232d988d868b21fe472df57a4ba6703abde65dee79744161cc54e32",
+    "reject-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "custom-reject.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "direct.yaml": "3a7e79dae943a690d8cfc3473042d010b0fc1052c4ade5ed99ca2da032776dd7",
+    "direct-extra.yaml": "b562578b6157dfff2cf05658bacfd700cb8d7d6db0405f10f93cbb22aa5b48cc",
+    "custom-direct.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "proxy.yaml": "752466f4ffc74bb6bfe924852c9357b44b788c45eb14e49e10e0491c7d058f2e",
+    "proxy-extra.yaml": "41c6076888977e76b2df3a46771a5dc673575c67aceaa80c0c15e21c9eaca7ab",
+    "custom-proxy.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "rules-config.yaml": "b9ea4b0e0dfee907dd4cda4d9078a1c84dc8a6c52e07e907d92ebbc9a30c5eb2",
+    "flclash.js": "576339198bcabaa0620435ae04cc4f5aacd8a9ca97e89d9ba8b92502eeafcbe8",
+    "NOTICE.txt": "7bc0a8519e350fcac1d35c96754e8deeeb7a498b82d9db8569a435fce7039ef6",
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  }
+}
