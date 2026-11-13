@@ -14,10 +14,41 @@ import urllib.request
 
 import yaml
 
+if __package__:
+    from .geodata import service_rules
+else:
+    from geodata import service_rules
+
 ROOT = Path(__file__).resolve().parents[1]
 UPSTREAM = "Loyalsoldier/v2ray-rules-dat"
 CATEGORIES = ("reject", "direct", "proxy")
 GROUP = "自定义分流"
+
+
+def load_services(path):
+    services = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(services, list) or not services:
+        raise ValueError("services.yaml 必须包含至少一个服务")
+    ids, names = set(CATEGORIES) | {"manifest", "rules-config", "flclash"}, {GROUP, "DIRECT", "REJECT"}
+    for service in services:
+        if not isinstance(service, dict) or set(service) - {"id", "name", "geosite", "geoip", "default"}:
+            raise ValueError("服务配置包含未知字段")
+        for key in ("id", "name", "geosite", "default"):
+            if not isinstance(service.get(key), str) or not service[key].strip():
+                raise ValueError("服务缺少有效字段: " + key)
+        identifier, name = service["id"], service["name"]
+        if not re.fullmatch(r"[a-z][a-z0-9]*", identifier) or identifier in ids:
+            raise ValueError("服务 id 非法或重复: " + identifier)
+        if name in names or any(c in name for c in ",\n\r") or name != name.strip():
+            raise ValueError("服务组名称非法或重复: " + name)
+        for key in ("geosite", "geoip"):
+            if key in service and (not isinstance(service[key], str) or not re.fullmatch(r"[a-z0-9!_-]+", service[key])):
+                raise ValueError("服务分类非法: " + key)
+        if service["default"] not in (GROUP, "DIRECT"):
+            raise ValueError("服务 default 必须为 DIRECT 或 " + GROUP)
+        ids.add(identifier)
+        names.add(name)
+    return services
 
 
 def download(url):
@@ -97,7 +128,8 @@ def split_rules(rules):
     return sorted(domains), sorted(extra)
 
 
-def build(upstream_texts, custom_dir, output, repository, upstream_ref):
+def build(upstream_texts, custom_dir, output, repository, upstream_ref,
+          *, services, service_texts, geodata_hashes):
     if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository):
         raise ValueError("repository 必须是 owner/repo")
     upstream = {c: parse_text(upstream_texts[c], c + "-list.txt") for c in CATEGORIES}
@@ -125,6 +157,14 @@ def build(upstream_texts, custom_dir, output, repository, upstream_ref):
         behaviors[category + "-extra"] = "classical"
         payloads["custom-" + category] = sorted(custom[category])
         behaviors["custom-" + category] = "classical"
+    for service in services:
+        identifier = service["id"]
+        entries = parse_text(service_texts[identifier], "geosite/" + identifier)
+        if not entries:
+            raise ValueError("服务规则为空: " + identifier)
+        domains, extra = split_rules(entries - excluded - all_custom)
+        payloads[identifier], payloads[identifier + "-extra"] = domains, extra
+        behaviors[identifier], behaviors[identifier + "-extra"] = "domain", "classical"
     base = f"https://raw.githubusercontent.com/{repository}/release"
     providers = {
         "pr-" + name: {
@@ -145,7 +185,11 @@ def build(upstream_texts, custom_dir, output, repository, upstream_ref):
         rules.append(f"IP-CIDR,{cidr},DIRECT,no-resolve")
     for cidr in ("::1/128", "fc00::/7", "fe80::/10"):
         rules.append(f"IP-CIDR6,{cidr},DIRECT,no-resolve")
-    for category in ("reject", "proxy", "direct"):
+    rules.extend(f"RULE-SET,pr-reject{suffix},REJECT" for suffix in ("", "-extra"))
+    # Match service domains before IP rules, then fall back to broad categories.
+    for suffix in ("", "-extra"):
+        rules.extend(f"RULE-SET,pr-{s['id']}{suffix},{s['name']}" for s in services)
+    for category in ("proxy", "direct"):
         rules.extend(f"RULE-SET,pr-{category}{suffix},{targets[category]}" for suffix in ("", "-extra"))
     rules.append("MATCH," + GROUP)
     fragment = {"rule-providers": providers, "rules": rules}
@@ -154,7 +198,10 @@ def build(upstream_texts, custom_dir, output, repository, upstream_ref):
         for name, payload in payloads.items()
     }
     files["rules-config.yaml"] = yaml.safe_dump(fragment, allow_unicode=True, sort_keys=False)
-    files["flclash.js"] = (ROOT / "templates/flclash.js").read_text().replace("__RULE_CONFIG__", json.dumps(fragment, ensure_ascii=False, indent=2))
+    script = (ROOT / "templates/flclash.js").read_text()
+    files["flclash.js"] = script.replace(
+        "__RULE_CONFIG__", json.dumps(fragment, ensure_ascii=False, indent=2)
+    ).replace("__SERVICES__", json.dumps(services, ensure_ascii=False, indent=2))
     files["NOTICE.txt"] = (ROOT / "NOTICE").read_text()
     files["LICENSE"] = (ROOT / "LICENSE").read_text()
     manifest = {
@@ -164,11 +211,12 @@ def build(upstream_texts, custom_dir, output, repository, upstream_ref):
         "upstream": {
             "repository": UPSTREAM,
             "revision": upstream_ref,
-            "sha256": {
+            "sha256": {**geodata_hashes, **{
                 category: hashlib.sha256(text.encode()).hexdigest()
                 for category, text in upstream_texts.items()
-            },
+            }},
         },
+        "services": services,
         "counts": {name: len(payload) for name, payload in payloads.items()},
         "sha256": {
             name: hashlib.sha256(content.encode()).hexdigest()
@@ -192,16 +240,26 @@ def main():
     parser.add_argument("--upstream-ref", help="本地快照版本，或要下载的上游 commit SHA")
     parser.add_argument("--custom-dir", type=Path, default=ROOT / "rules")
     parser.add_argument("--output", type=Path, default=ROOT / "dist")
+    parser.add_argument("--services", type=Path, default=ROOT / "services.yaml")
     args = parser.parse_args()
+    services = load_services(args.services)
     if args.upstream_dir:
         revision = args.upstream_ref or "local"
         texts = {c: (args.upstream_dir / (c + "-list.txt")).read_text(encoding="utf-8") for c in CATEGORIES}
+        geodata = {name: (args.upstream_dir / name).read_bytes() for name in ("geosite.dat", "geoip.dat")}
     else:
         revision = args.upstream_ref or json.loads(download(f"https://api.github.com/repos/{UPSTREAM}/commits/release"))["sha"]
         if not re.fullmatch(r"[0-9a-f]{40}", revision):
             parser.error("远程上游版本必须是完整 commit SHA")
         texts = {c: download(f"https://raw.githubusercontent.com/{UPSTREAM}/{revision}/{c}-list.txt").decode("utf-8") for c in CATEGORIES}
-    manifest = build(texts, args.custom_dir, args.output, args.repository, revision)
+        geodata = {name: download(f"https://raw.githubusercontent.com/{UPSTREAM}/{revision}/{name}")
+                   for name in ("geosite.dat", "geoip.dat")}
+    extracted = service_rules(geodata["geosite.dat"], geodata["geoip.dat"], services)
+    manifest = build(
+        texts, args.custom_dir, args.output, args.repository, revision,
+        services=services, service_texts=extracted,
+        geodata_hashes={name: hashlib.sha256(data).hexdigest() for name, data in geodata.items()},
+    )
     print(json.dumps(manifest["counts"], ensure_ascii=False, indent=2))
 
 

@@ -6,7 +6,7 @@ import unittest
 
 import yaml
 
-from scripts.build import build, parse_rule, parse_text, split_rules
+from scripts.build import ROOT, build, load_services, parse_rule, parse_text, split_rules
 
 
 class RuleTests(unittest.TestCase):
@@ -47,9 +47,12 @@ class BuildTests(unittest.TestCase):
             (self.custom / (name + ".txt")).write_text("")
         self.output = self.root / "dist"
         self.upstream = {"direct": "cn.example\nshared.example", "proxy": "world.example\nshared.example", "reject": "ads.example\nfull:login.example\nkeyword:tracking"}
+        self.services = load_services(ROOT / "services.yaml")
+        self.service_texts = {s["id"]: s["id"] + ".example" for s in self.services}
 
     def run_build(self):
-        return build(self.upstream, self.custom, self.output, "owner/repo", "a" * 40)
+        return build(self.upstream, self.custom, self.output, "owner/repo", "a" * 40,
+                     services=self.services, service_texts=self.service_texts, geodata_hashes={})
 
     def payload(self, name):
         return yaml.safe_load((self.output / (name + ".yaml")).read_text())["payload"]
@@ -96,6 +99,41 @@ class BuildTests(unittest.TestCase):
         first = self.run_build()
         second = self.run_build()
         self.assertEqual(first["sha256"], second["sha256"])
+
+    def test_service_priority_and_telegram_ip(self):
+        self.service_texts["telegram"] += "\nIP-CIDR,91.108.0.0/16,no-resolve"
+        self.run_build()
+        fragment = yaml.safe_load((self.output / "rules-config.yaml").read_text())
+        rules = fragment["rules"]
+        self.assertLess(rules.index("RULE-SET,pr-reject,REJECT"), rules.index("RULE-SET,pr-telegram,分流-Telegram"))
+        self.assertLess(rules.index("RULE-SET,pr-google,分流-Google"), rules.index("RULE-SET,pr-telegram-extra,分流-Telegram"))
+        self.assertLess(rules.index("RULE-SET,pr-telegram-extra,分流-Telegram"), rules.index("RULE-SET,pr-proxy,自定义分流"))
+        self.assertEqual(self.payload("telegram-extra"), ["IP-CIDR,91.108.0.0/16,no-resolve"])
+        self.assertEqual(len(fragment["rule-providers"]), 19)
+
+    def test_global_overrides_and_exclusions_apply_to_services(self):
+        self.service_texts["apple"] += "\nblocked.example"
+        (self.custom / "proxy.txt").write_text("apple.example")
+        (self.custom / "exclude.txt").write_text("blocked.example")
+        self.run_build()
+        self.assertEqual(self.payload("apple"), [])
+        self.assertIn("DOMAIN-SUFFIX,apple.example", self.payload("custom-proxy"))
+
+    def test_missing_or_empty_service_never_overwrites_output(self):
+        self.run_build()
+        previous = (self.output / "manifest.json").read_bytes()
+        self.service_texts["telegram"] = ""
+        with self.assertRaisesRegex(ValueError, "服务规则为空"):
+            self.run_build()
+        self.assertEqual((self.output / "manifest.json").read_bytes(), previous)
+
+    def test_service_configuration_rejects_collisions_and_invalid_targets(self):
+        for change in ({"id": "direct"}, {"name": "自定义分流"}, {"default": "missing"}, {"name": "bad,name"}, {"geoip": "../bad"}):
+            services = [dict(self.services[0], **change)]
+            path = self.root / "services.yaml"
+            path.write_text(yaml.safe_dump(services, allow_unicode=True))
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                load_services(path)
 
 
 if __name__ == "__main__":
