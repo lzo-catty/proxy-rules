@@ -1,14 +1,15 @@
 # 自用 FlClash 分流规则
 
-将 `rules/` 中的个人规则与 [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 的直连、代理、广告拦截列表合并，从同一版本的 `geosite.dat` / `geoip.dat` 提取服务分类，通过 GitHub Actions 每日构建，发布为手机 FlClash 可以通过链接更新的 Mihomo 规则集。默认生成 Global 和 15 个带图标的独立服务策略组，AI 分为 ChatGPT、Claude、Gemini 三组。
+将 `config/rules/` 中的个人规则与 [Loyalsoldier/v2ray-rules-dat](https://github.com/Loyalsoldier/v2ray-rules-dat) 的直连、代理、广告拦截列表合并，从同一版本的 `geosite.dat` / `geoip.dat` 提取服务分类，通过 GitHub Actions 每日构建，发布为手机 FlClash 可以通过链接更新的 Mihomo 规则集。默认生成 Global 和 15 个带图标的独立服务策略组，AI 分为 ChatGPT、Claude、Gemini 三组。
 
 ## 项目结构
 
 ```text
 .
 ├── config/
-│   └── services.yaml       # 服务策略组、默认出口和图标配置
-├── rules/                  # 个人直连、代理、拦截和排除规则
+│   ├── policy-groups/      # 策略组配置
+│   │   └── services.yaml   # 服务策略组、默认出口和图标
+│   └── rules/              # 个人直连、代理、拦截和排除规则
 ├── templates/              # FlClash 扩展脚本模板
 ├── scripts/                # 规则构建、DAT 解析和内核验证工具
 ├── tests/                  # 自动化测试
@@ -20,7 +21,7 @@
 └── NOTICE
 ```
 
-服务配置集中在 `config/`，个人规则放在 `rules/`。构建产物仍发布到 `release` 分支根目录，手机使用的链接不变。
+策略组配置放在 `config/policy-groups/`，个人规则放在 `config/rules/`。构建产物仍发布到 `release` 分支根目录，手机使用的链接不变。
 
 ## 手机怎么用
 
@@ -66,11 +67,11 @@ https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/flclash.js
 
 每个服务组都提供 **DIRECT、Global、原订阅策略组、所有内嵌节点、所有节点提供者中的节点**。例如 Telegram 选新加坡节点、Google 选日本节点、Apple 保持直连，互不影响。组中选择“Global”时才跟随该组变化；直接选择某个节点则独立使用该节点。FlClash 已保存的手动选择可能覆盖初始默认值。
 
-服务组直接使用服务名称，不添加前缀。如果原订阅已有 `Apple`、`Google`、`Global` 等同名组或节点，脚本会明确提示冲突，请先将原订阅同名项及其引用改名，或在 `config/services.yaml` 中选择不冲突的服务组名称。各新服务组不互相引用，避免循环依赖。`Global` 与 Mihomo 内置的全大写 `GLOBAL` 名称不同；使用本项目时保持规则模式。
+服务组直接使用服务名称，不添加前缀。如果原订阅已有 `Apple`、`Google`、`Global` 等同名组或节点，脚本会明确提示冲突，请先将原订阅同名项及其引用改名，或在 `config/policy-groups/services.yaml` 中选择不冲突的服务组名称。各新服务组不互相引用，避免循环依赖。`Global` 与 Mihomo 内置的全大写 `GLOBAL` 名称不同；使用本项目时保持规则模式。
 
 **从旧版单组配置或带“分流-”前缀的版本升级：更新远程扩展脚本并重新应用订阅一次，然后重新选择各组出口。** 只更新规则集不会自动创建或重命名策略组。入口仍是原来的 `flclash.js` 链接。
 
-在 `config/services.yaml` 中管理服务、默认出口和图标。例如修改现有 YouTube 组：
+在 `config/policy-groups/services.yaml` 中管理服务、默认出口和图标。例如修改现有 YouTube 组：
 
 ```yaml
 - id: youtube
@@ -90,10 +91,10 @@ https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/flclash.js
 
 | 文件 | 用途 |
 | --- | --- |
-| `rules/direct.txt` | 强制直连 |
-| `rules/proxy.txt` | 强制走代理策略组 |
-| `rules/reject.txt` | 强制拦截 |
-| `rules/exclude.txt` | 从全部上游分类中移除完全相同的规则 |
+| `config/rules/direct.txt` | 强制直连 |
+| `config/rules/proxy.txt` | 强制走代理策略组 |
+| `config/rules/reject.txt` | 强制拦截 |
+| `config/rules/exclude.txt` | 从全部上游分类中移除完全相同的规则 |
 
 每行一条，不带最终策略名称，支持空行和整行 `#` 注释：
 
@@ -120,7 +121,7 @@ IP-CIDR6,2001:db8::/32,no-resolve
 1. 自定义拦截 → 自定义直连 → 自定义代理。
 2. 本地网络域名 `lan`/`local` 和常用私有 IPv4/IPv6 网段直连。
 3. 合并后的上游拦截（服务分组不会绕过广告拦截）。
-4. 独立服务规则：按 `config/services.yaml` 顺序，对每个服务依次匹配域名集、补充规则（关键词、正则及 IP），然后才进入下一个服务。
+4. 独立服务规则：按 `config/policy-groups/services.yaml` 顺序，对每个服务依次匹配域名集、补充规则（关键词、正则及 IP），然后才进入下一个服务。
 5. 通用上游代理 → 直连。
 6. 未命中流量走 **Global** 策略组。
 

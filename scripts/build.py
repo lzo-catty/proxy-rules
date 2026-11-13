@@ -21,7 +21,9 @@ else:
     from geodata import service_rules
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SERVICES = ROOT / "config" / "services.yaml"
+CONFIG_DIR = ROOT / "config"
+DEFAULT_SERVICES = CONFIG_DIR / "policy-groups" / "services.yaml"
+DEFAULT_RULES = CONFIG_DIR / "rules"
 UPSTREAM = "Loyalsoldier/v2ray-rules-dat"
 CATEGORIES = ("reject", "direct", "proxy")
 GROUP = "Global"
@@ -244,10 +246,11 @@ def main():
     parser.add_argument("--repository", default=os.environ.get("GITHUB_REPOSITORY", "lzo-catty/proxy-rules"))
     parser.add_argument("--upstream-dir", type=Path, help="本地 upstream release 快照目录（离线构建）")
     parser.add_argument("--upstream-ref", help="本地快照版本，或要下载的上游 commit SHA")
-    parser.add_argument("--custom-dir", type=Path, default=ROOT / "rules")
+    parser.add_argument("--custom-dir", type=Path, default=DEFAULT_RULES,
+                        help="个人规则目录（默认：config/rules/）")
     parser.add_argument("--output", type=Path, default=ROOT / "dist")
     parser.add_argument("--services", type=Path, default=DEFAULT_SERVICES,
-                        help="服务策略配置（默认：config/services.yaml）")
+                        help="服务策略配置（默认：config/policy-groups/services.yaml）")
     args = parser.parse_args()
     services = load_services(args.services)
     if args.upstream_dir:

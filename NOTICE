@@ -4,4 +4,4 @@ https://github.com/Loyalsoldier/v2ray-rules-dat
 上游许可：https://github.com/Loyalsoldier/v2ray-rules-dat/blob/master/LICENSE
 构建使用的上游 commit 和输入文件 SHA-256 记录在 manifest.json。
 服务域名及 Telegram IP 规则从同一上游版本的 geosite.dat / geoip.dat 提取。
-自定义规则来自本仓库 rules/；转换代码和来源可在 manifest.json 的 repository 查看。
+自定义规则来自本仓库 config/rules/；转换代码和来源可在 manifest.json 的 repository 查看。
