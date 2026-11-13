@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-13T05:26:49.020416+00:00",
+  "generated_at": "2026-11-13T09:47:48.906837+00:00",
   "repository": "lzo-catty/proxy-rules",
-  "source_revision": "b2b6878aa2c3f0e38fc577fc7ff1958ec66264ce",
+  "source_revision": "5d4480f54df8d69dc19488d840070d909c5211e5",
   "upstream": {
     "repository": "Loyalsoldier/v2ray-rules-dat",
     "revision": "e3cc7a947e46e24b3f3f8090f3063261f2ce9a66",
@@ -18,32 +18,107 @@
       "id": "bilibili",
       "name": "Bilibili",
       "geosite": "bilibili",
-      "default": "DIRECT"
+      "default": "DIRECT",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png"
     },
     {
       "id": "telegram",
       "name": "Telegram",
       "geosite": "telegram",
       "geoip": "telegram",
-      "default": "Global"
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "geosite": "youtube",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png"
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "geosite": "openai",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "geosite": "anthropic",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/claude-color.svg"
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "geosite": "google-deepmind",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-svg/icons/gemini-color.svg"
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "geosite": "github",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png"
+    },
+    {
+      "id": "steam",
+      "name": "Steam",
+      "geosite": "steam",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Steam.png"
+    },
+    {
+      "id": "netflix",
+      "name": "Netflix",
+      "geosite": "netflix",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png"
+    },
+    {
+      "id": "disney",
+      "name": "Disney+",
+      "geosite": "disney",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "geosite": "spotify",
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png"
+    },
+    {
+      "id": "onedrive",
+      "name": "OneDrive",
+      "geosite": "onedrive",
+      "default": "DIRECT",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/OneDrive.png"
     },
     {
       "id": "apple",
       "name": "Apple",
       "geosite": "apple",
-      "default": "DIRECT"
+      "default": "DIRECT",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
     },
     {
       "id": "microsoft",
       "name": "Microsoft",
       "geosite": "microsoft",
-      "default": "DIRECT"
+      "default": "DIRECT",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png"
     },
     {
       "id": "google",
       "name": "Google",
       "geosite": "google",
-      "default": "Global"
+      "default": "Global",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png"
     }
   ],
   "counts": {
@@ -60,6 +135,26 @@
     "bilibili-extra": 0,
     "telegram": 21,
     "telegram-extra": 12,
+    "youtube": 178,
+    "youtube-extra": 0,
+    "chatgpt": 24,
+    "chatgpt-extra": 1,
+    "claude": 21,
+    "claude-extra": 0,
+    "gemini": 49,
+    "gemini-extra": 0,
+    "github": 66,
+    "github-extra": 0,
+    "steam": 61,
+    "steam-extra": 0,
+    "netflix": 24,
+    "netflix-extra": 4,
+    "disney": 224,
+    "disney-extra": 1,
+    "spotify": 28,
+    "spotify-extra": 0,
+    "onedrive": 11,
+    "onedrive-extra": 0,
     "apple": 1792,
     "apple-extra": 0,
     "microsoft": 757,
@@ -81,14 +176,34 @@
     "bilibili-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "telegram.yaml": "87453f1df663c302e018281149f313c6bd36f7a4fd0b9b0dcb1b4d3a2d62f474",
     "telegram-extra.yaml": "0368ba6995ff4d41a95ca431ed0b23744de3f16d4fa6ff269f7f1258ba738ab1",
+    "youtube.yaml": "ad65b10e9bbfd3e69e50f9d596ee93d2a60fef8a702a7d87eddf64814d4f0671",
+    "youtube-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "chatgpt.yaml": "cd2a7eba96b5ba87133e91f63ef71ca977d8e03e0ff70417b47787cec44c82ea",
+    "chatgpt-extra.yaml": "ff71bc2d26f1bb7603144f98935f7b2a30117cb073d60f4306255aead337dd24",
+    "claude.yaml": "5258ac9321fdf69de7c817f53119cef42c5e75f97bb4dbaf10543bcb766d76ad",
+    "claude-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "gemini.yaml": "0b160fb1aa9f22dfa0b24f9eb9f9c09bf173ac12cb39760403530733a5dd90a2",
+    "gemini-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "github.yaml": "a6d322b69f08b13b59c800c0f9d672763409a40baad29f3ef466348b73f0b05e",
+    "github-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "steam.yaml": "309c3fae97ab23f94c57be5581758119ba571f08e69b354feac9f83e6906b283",
+    "steam-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "netflix.yaml": "cf7465c5d62beaf04c6de6e499f005277ad63970c10cd0a0de407cbbad505e3b",
+    "netflix-extra.yaml": "d3d58373a36ff9753d2344eae51b2d5f849bed0f1e6a260302bed0329a3aabd9",
+    "disney.yaml": "15410b8ff60f991e877155a17fea4611a1b340d4aab450e1ea03ba39a3e33315",
+    "disney-extra.yaml": "3bf60916c25a000004254448fb87ef1bd4cf98191e9eec2b6dc08f52ac206c9c",
+    "spotify.yaml": "d4d9ff46fb1fca06374728fca7c0c4049255a25e05765e0f6805ee93f4642980",
+    "spotify-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
+    "onedrive.yaml": "66dbbc53ef2729f8804316040da155011bff0faf811d793c5e66748de78c3bcb",
+    "onedrive-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "apple.yaml": "378779bcbfdf941eb24250326d24f81168fa7ff41a253b03033d1ccf10821848",
     "apple-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "microsoft.yaml": "ff4431f8d22b6ccc872e6aaf27a2c3fe8fa7d1ec6b2132765ca4e9a40642d843",
     "microsoft-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "google.yaml": "cbf2edd81a106f44d4b0fdfa5987c2a5aef7fbe978291385e9159ed12abac358",
     "google-extra.yaml": "1ad83546059761985124c004b48aaa4d38b43b97c8c5c3fa06443b760776ab2a",
-    "rules-config.yaml": "88afe4acfdd38e029c2c3ba763a2acdebdbcd4327bd1a2c0b0b4f8b908f0622d",
-    "flclash.js": "1af68074ad030c7d0ce4b4cf62d89dfb3d1549d26828737e9a33efc2d40c0f50",
+    "rules-config.yaml": "5c604119622337f5162c3590493f8672a2d027e255e264e97fca2a7e1900694a",
+    "flclash.js": "387a951778d34d3f3bdbf67975b18086294b3015a9e233bb8d29caea9b3f1ca3",
     "NOTICE.txt": "d34a923ef14293b5d46681012662e536feeaa3ddceae8d5a0f544c240aaa1f43",
     "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
   }

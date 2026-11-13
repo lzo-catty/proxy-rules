@@ -90,6 +90,146 @@ rule-providers:
     url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/telegram-extra.yaml
     path: ./ruleset/proxy-rules/telegram-extra.yaml
     interval: 86400
+  pr-youtube:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/youtube.yaml
+    path: ./ruleset/proxy-rules/youtube.yaml
+    interval: 86400
+  pr-youtube-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/youtube-extra.yaml
+    path: ./ruleset/proxy-rules/youtube-extra.yaml
+    interval: 86400
+  pr-chatgpt:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/chatgpt.yaml
+    path: ./ruleset/proxy-rules/chatgpt.yaml
+    interval: 86400
+  pr-chatgpt-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/chatgpt-extra.yaml
+    path: ./ruleset/proxy-rules/chatgpt-extra.yaml
+    interval: 86400
+  pr-claude:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/claude.yaml
+    path: ./ruleset/proxy-rules/claude.yaml
+    interval: 86400
+  pr-claude-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/claude-extra.yaml
+    path: ./ruleset/proxy-rules/claude-extra.yaml
+    interval: 86400
+  pr-gemini:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/gemini.yaml
+    path: ./ruleset/proxy-rules/gemini.yaml
+    interval: 86400
+  pr-gemini-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/gemini-extra.yaml
+    path: ./ruleset/proxy-rules/gemini-extra.yaml
+    interval: 86400
+  pr-github:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/github.yaml
+    path: ./ruleset/proxy-rules/github.yaml
+    interval: 86400
+  pr-github-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/github-extra.yaml
+    path: ./ruleset/proxy-rules/github-extra.yaml
+    interval: 86400
+  pr-steam:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/steam.yaml
+    path: ./ruleset/proxy-rules/steam.yaml
+    interval: 86400
+  pr-steam-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/steam-extra.yaml
+    path: ./ruleset/proxy-rules/steam-extra.yaml
+    interval: 86400
+  pr-netflix:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/netflix.yaml
+    path: ./ruleset/proxy-rules/netflix.yaml
+    interval: 86400
+  pr-netflix-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/netflix-extra.yaml
+    path: ./ruleset/proxy-rules/netflix-extra.yaml
+    interval: 86400
+  pr-disney:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/disney.yaml
+    path: ./ruleset/proxy-rules/disney.yaml
+    interval: 86400
+  pr-disney-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/disney-extra.yaml
+    path: ./ruleset/proxy-rules/disney-extra.yaml
+    interval: 86400
+  pr-spotify:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/spotify.yaml
+    path: ./ruleset/proxy-rules/spotify.yaml
+    interval: 86400
+  pr-spotify-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/spotify-extra.yaml
+    path: ./ruleset/proxy-rules/spotify-extra.yaml
+    interval: 86400
+  pr-onedrive:
+    type: http
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/onedrive.yaml
+    path: ./ruleset/proxy-rules/onedrive.yaml
+    interval: 86400
+  pr-onedrive-extra:
+    type: http
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/lzo-catty/proxy-rules/release/onedrive-extra.yaml
+    path: ./ruleset/proxy-rules/onedrive-extra.yaml
+    interval: 86400
   pr-apple:
     type: http
     behavior: domain
@@ -151,14 +291,34 @@ rules:
 - RULE-SET,pr-reject,REJECT
 - RULE-SET,pr-reject-extra,REJECT
 - RULE-SET,pr-bilibili,Bilibili
-- RULE-SET,pr-telegram,Telegram
-- RULE-SET,pr-apple,Apple
-- RULE-SET,pr-microsoft,Microsoft
-- RULE-SET,pr-google,Google
 - RULE-SET,pr-bilibili-extra,Bilibili
+- RULE-SET,pr-telegram,Telegram
 - RULE-SET,pr-telegram-extra,Telegram
+- RULE-SET,pr-youtube,YouTube
+- RULE-SET,pr-youtube-extra,YouTube
+- RULE-SET,pr-chatgpt,ChatGPT
+- RULE-SET,pr-chatgpt-extra,ChatGPT
+- RULE-SET,pr-claude,Claude
+- RULE-SET,pr-claude-extra,Claude
+- RULE-SET,pr-gemini,Gemini
+- RULE-SET,pr-gemini-extra,Gemini
+- RULE-SET,pr-github,GitHub
+- RULE-SET,pr-github-extra,GitHub
+- RULE-SET,pr-steam,Steam
+- RULE-SET,pr-steam-extra,Steam
+- RULE-SET,pr-netflix,Netflix
+- RULE-SET,pr-netflix-extra,Netflix
+- RULE-SET,pr-disney,Disney+
+- RULE-SET,pr-disney-extra,Disney+
+- RULE-SET,pr-spotify,Spotify
+- RULE-SET,pr-spotify-extra,Spotify
+- RULE-SET,pr-onedrive,OneDrive
+- RULE-SET,pr-onedrive-extra,OneDrive
+- RULE-SET,pr-apple,Apple
 - RULE-SET,pr-apple-extra,Apple
+- RULE-SET,pr-microsoft,Microsoft
 - RULE-SET,pr-microsoft-extra,Microsoft
+- RULE-SET,pr-google,Google
 - RULE-SET,pr-google-extra,Google
 - RULE-SET,pr-proxy,Global
 - RULE-SET,pr-proxy-extra,Global
