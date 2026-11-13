@@ -6,7 +6,7 @@ import unittest
 
 import yaml
 
-from scripts.build import ROOT, build, load_services, parse_rule, parse_text, split_rules
+from scripts.build import DEFAULT_SERVICES, build, load_services, parse_rule, parse_text, split_rules
 
 
 class RuleTests(unittest.TestCase):
@@ -47,7 +47,7 @@ class BuildTests(unittest.TestCase):
             (self.custom / (name + ".txt")).write_text("")
         self.output = self.root / "dist"
         self.upstream = {"direct": "cn.example\nshared.example", "proxy": "world.example\nshared.example", "reject": "ads.example\nfull:login.example\nkeyword:tracking"}
-        self.services = load_services(ROOT / "services.yaml")
+        self.services = load_services(DEFAULT_SERVICES)
         self.service_texts = {s["id"]: s["id"] + ".example" for s in self.services}
 
     def run_build(self):

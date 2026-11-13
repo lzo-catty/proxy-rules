@@ -21,6 +21,7 @@ else:
     from geodata import service_rules
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_SERVICES = ROOT / "config" / "services.yaml"
 UPSTREAM = "Loyalsoldier/v2ray-rules-dat"
 CATEGORIES = ("reject", "direct", "proxy")
 GROUP = "Global"
@@ -29,7 +30,7 @@ GROUP = "Global"
 def load_services(path):
     services = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(services, list) or not services:
-        raise ValueError("services.yaml 必须包含至少一个服务")
+        raise ValueError(f"{path}: 必须包含至少一个服务")
     ids, names = set(CATEGORIES) | {"manifest", "rules-config", "flclash"}, {GROUP, "DIRECT", "REJECT"}
     for service in services:
         if not isinstance(service, dict) or set(service) - {"id", "name", "geosite", "geoip", "default", "icon"}:
@@ -245,7 +246,8 @@ def main():
     parser.add_argument("--upstream-ref", help="本地快照版本，或要下载的上游 commit SHA")
     parser.add_argument("--custom-dir", type=Path, default=ROOT / "rules")
     parser.add_argument("--output", type=Path, default=ROOT / "dist")
-    parser.add_argument("--services", type=Path, default=ROOT / "services.yaml")
+    parser.add_argument("--services", type=Path, default=DEFAULT_SERVICES,
+                        help="服务策略配置（默认：config/services.yaml）")
     args = parser.parse_args()
     services = load_services(args.services)
     if args.upstream_dir:
