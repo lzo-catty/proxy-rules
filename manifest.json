@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-11-13T09:56:10.370557+00:00",
+  "generated_at": "2026-11-14T03:31:45.829963+00:00",
   "repository": "lzo-catty/proxy-rules",
   "source_revision": "9afd797c32f7a0b294f274162910682a3c520d37",
   "upstream": {
     "repository": "Loyalsoldier/v2ray-rules-dat",
-    "revision": "e3cc7a947e46e24b3f3f8090f3063261f2ce9a66",
+    "revision": "89b31db8c47941a0611f3da6f20ce28643b9a475",
     "sha256": {
-      "geosite.dat": "f5bf5d977840be4b9e73856b20f8d6dc7ef72285330c5f270d1d64cc2bf7982f",
+      "geosite.dat": "6206c215d45f1acb663336b17a77ad5be62709680dc1ac2b2194121d6a1680f5",
       "geoip.dat": "304ac8a1cbcc8166e4f5a4f32955e4d0fb77a1bd713583e371b30ee27f3659d8",
-      "reject": "bc601d1ed56b6f7d5b51e8c75c029d336531098c65c1889c20ecd030725e0d76",
-      "direct": "4354f4703b356c653882e70dda64c47cb56f6e27aff3d0ed5d2fdb1a01443e49",
-      "proxy": "140fe42d1d0b3dea85ff0f5f8c7059b7e9fac10686a4c97587621ac107851017"
+      "reject": "3da2b64743b29d36fcaf9fb46e162c250e5acafbcbd54b528b4689ae76a65b22",
+      "direct": "b451cbfd051193587a32671835370c753757f8c65f433cd06d6a278cc7c1dfcb",
+      "proxy": "93d26118cf00418a7b78688b4e8026d8016f08b7f4e3d762db653751f14b93f8"
     }
   },
   "services": [
@@ -122,13 +122,13 @@
     }
   ],
   "counts": {
-    "reject": 199928,
+    "reject": 200344,
     "reject-extra": 0,
     "custom-reject": 0,
-    "direct": 110189,
+    "direct": 110288,
     "direct-extra": 8,
     "custom-direct": 0,
-    "proxy": 27351,
+    "proxy": 27352,
     "proxy-extra": 151,
     "custom-proxy": 0,
     "bilibili": 53,
@@ -163,13 +163,13 @@
     "google-extra": 2
   },
   "sha256": {
-    "reject.yaml": "9a174a525232d988d868b21fe472df57a4ba6703abde65dee79744161cc54e32",
+    "reject.yaml": "e81c6fe7b32e921afe9816db878a9b29419388ed438cc3fd266082dc35c3255d",
     "reject-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "custom-reject.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
-    "direct.yaml": "3a7e79dae943a690d8cfc3473042d010b0fc1052c4ade5ed99ca2da032776dd7",
+    "direct.yaml": "ca4286283d9dc3547678de8c13b696f8730a773632a693c0ac04a7414f997e43",
     "direct-extra.yaml": "b562578b6157dfff2cf05658bacfd700cb8d7d6db0405f10f93cbb22aa5b48cc",
     "custom-direct.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
-    "proxy.yaml": "752466f4ffc74bb6bfe924852c9357b44b788c45eb14e49e10e0491c7d058f2e",
+    "proxy.yaml": "2ed3435484713fc9b05188e7434ed159def6e1c33b96ccb2d0dc15f1a20c68bc",
     "proxy-extra.yaml": "41c6076888977e76b2df3a46771a5dc673575c67aceaa80c0c15e21c9eaca7ab",
     "custom-proxy.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "bilibili.yaml": "86bf3f59e821bad902f9594a08e52a4bedd260e23b31c1e2ae674dd3fd08dee4",
