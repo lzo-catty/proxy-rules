@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-19T04:28:26.942674+00:00",
+  "generated_at": "2026-11-20T04:14:53.619443+00:00",
   "repository": "lzo-catty/proxy-rules",
   "source_revision": "9afd797c32f7a0b294f274162910682a3c520d37",
   "upstream": {
     "repository": "Loyalsoldier/v2ray-rules-dat",
-    "revision": "3914c5cf42be87696db5139fc4b7d681b09b8d4a",
+    "revision": "0df8f5bb8479ffab2d4b7706a6b5b79bf4049639",
     "sha256": {
-      "geosite.dat": "268f30619cfe5db5a925766bf966045f23b58b9a57bbc00c00396eb548011814",
-      "geoip.dat": "304ac8a1cbcc8166e4f5a4f32955e4d0fb77a1bd713583e371b30ee27f3659d8",
-      "reject": "fb5f1c7912f12014846bb987c115ead7725df86516ce8fedf41c5aec87de79e4",
+      "geosite.dat": "e0fa5edd4b078d23c8b04c4e36bd1edda0f2ad32be4ea3312457ee8515f6fce4",
+      "geoip.dat": "d4ec4c5e5d5a38c1399964ea9fd8c94288426a3b31b483904b67819fc07f4466",
+      "reject": "379e8d143e1e79460b96705dc1586ebb6208a88de1deb2679fe3f0e8fbad1242",
       "direct": "fae243fcc0e0b7fe333d59d20f07da757c260bfa34faa7f039115af373c2e4a4",
       "proxy": "8083769f04ad187e6fce5efc9d83b79780ebc8039c9055d00067518f0992ce37"
     }
@@ -122,7 +122,7 @@
     }
   ],
   "counts": {
-    "reject": 200374,
+    "reject": 200748,
     "reject-extra": 0,
     "custom-reject": 0,
     "direct": 110247,
@@ -163,7 +163,7 @@
     "google-extra": 2
   },
   "sha256": {
-    "reject.yaml": "a3d24fa6b99767e5c39c7d76d409997d049286e3442e6e7d4aad744246a18131",
+    "reject.yaml": "91f5ac677f0295a106437669068e8b49b648d458c408c458f64560ea7d502430",
     "reject-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "custom-reject.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "direct.yaml": "3bf968bfaf8ce9237e27bddf72727f99fad5f567320c19f2498aa854367f9186",
