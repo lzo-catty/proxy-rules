@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-11-20T04:14:53.619443+00:00",
+  "generated_at": "2026-11-21T04:14:36.586405+00:00",
   "repository": "lzo-catty/proxy-rules",
   "source_revision": "9afd797c32f7a0b294f274162910682a3c520d37",
   "upstream": {
     "repository": "Loyalsoldier/v2ray-rules-dat",
-    "revision": "0df8f5bb8479ffab2d4b7706a6b5b79bf4049639",
+    "revision": "13f16def15efebb39c9a23206fdebb26bc8e4504",
     "sha256": {
-      "geosite.dat": "e0fa5edd4b078d23c8b04c4e36bd1edda0f2ad32be4ea3312457ee8515f6fce4",
+      "geosite.dat": "f0320d0cf22431eace345946a5fb196a6654e3e24441dffa3ea38ef28cd44289",
       "geoip.dat": "d4ec4c5e5d5a38c1399964ea9fd8c94288426a3b31b483904b67819fc07f4466",
-      "reject": "379e8d143e1e79460b96705dc1586ebb6208a88de1deb2679fe3f0e8fbad1242",
-      "direct": "fae243fcc0e0b7fe333d59d20f07da757c260bfa34faa7f039115af373c2e4a4",
-      "proxy": "8083769f04ad187e6fce5efc9d83b79780ebc8039c9055d00067518f0992ce37"
+      "reject": "a48926c8dd3714346ffe16d56f2258e63fe856a7a74a1dd6e63c777892cac185",
+      "direct": "6f0a812e5b6a240bc4555d4989ca227ade3eb2151a55b85d25aa9d4d711975cb",
+      "proxy": "6b52865a0ba97f8f632956c367d2f3758a7424a9d088bf8f0330eb66d58734ca"
     }
   },
   "services": [
@@ -122,13 +122,13 @@
     }
   ],
   "counts": {
-    "reject": 200748,
+    "reject": 201108,
     "reject-extra": 0,
     "custom-reject": 0,
-    "direct": 110247,
+    "direct": 110250,
     "direct-extra": 8,
     "custom-direct": 0,
-    "proxy": 27359,
+    "proxy": 27248,
     "proxy-extra": 151,
     "custom-proxy": 0,
     "bilibili": 53,
@@ -155,7 +155,7 @@
     "spotify-extra": 0,
     "onedrive": 11,
     "onedrive-extra": 0,
-    "apple": 1796,
+    "apple": 1666,
     "apple-extra": 0,
     "microsoft": 760,
     "microsoft-extra": 0,
@@ -163,13 +163,13 @@
     "google-extra": 2
   },
   "sha256": {
-    "reject.yaml": "91f5ac677f0295a106437669068e8b49b648d458c408c458f64560ea7d502430",
+    "reject.yaml": "90f0551cc337657beda197fd2b0c4f190e29eccd7fa2efb55390170c0d59e16f",
     "reject-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "custom-reject.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
-    "direct.yaml": "3bf968bfaf8ce9237e27bddf72727f99fad5f567320c19f2498aa854367f9186",
+    "direct.yaml": "ef5b7cd62c8586064b6e5e2bc5b40e3ecefbb9d1b8ce4168c95ffd667d449fc3",
     "direct-extra.yaml": "b562578b6157dfff2cf05658bacfd700cb8d7d6db0405f10f93cbb22aa5b48cc",
     "custom-direct.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
-    "proxy.yaml": "c3bf387a7bb91690ba56c81dd64866cd0cd4887d70fcad234dd2488346bb9859",
+    "proxy.yaml": "6059b9129209fc1cbaeeca2783792d4ac7cd34c74eee217d8c3dbe921ffacbb3",
     "proxy-extra.yaml": "41c6076888977e76b2df3a46771a5dc673575c67aceaa80c0c15e21c9eaca7ab",
     "custom-proxy.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "bilibili.yaml": "86bf3f59e821bad902f9594a08e52a4bedd260e23b31c1e2ae674dd3fd08dee4",
@@ -196,7 +196,7 @@
     "spotify-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "onedrive.yaml": "66dbbc53ef2729f8804316040da155011bff0faf811d793c5e66748de78c3bcb",
     "onedrive-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
-    "apple.yaml": "50641f28f691f2252fced751df6e59db11d6f2c14d5154ed997bca74b2276a19",
+    "apple.yaml": "e9d988d785a3dd96250a6ba71077cc19df2ce5f0f4eea49c032307e9622919b4",
     "apple-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
     "microsoft.yaml": "d4f012db8e1d586799c796c84f7d85b0df55e5cedc8d40000271e7e4b53892d9",
     "microsoft-extra.yaml": "0b2efabe5f713ed12bd02e9d9b6bee10d365dfd03845745f5ce7805ba44afae4",
